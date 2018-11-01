@@ -41,12 +41,20 @@
             <li class="item">
                 <div class="top">
                     <p>{{item.name}}</p>
-                    <p>Quant</p>
+                    <div class="quantity">
+                        <div class="minus">
+                            -
+                        </div>
+                        <div class="value">0</div>
+                        <div class="plus" data-id="{{item.id}}">
+                            +
+                        </div>
+                    </div>
                     <p>{{item.price}}$</p>
                 </div>
 
                 <div class="extra">
-
+                    <p>{{item.description}}</p>
                     Wt- {{item.weight}}
                 </div>
 
