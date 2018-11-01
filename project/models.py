@@ -19,5 +19,6 @@ class Item(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=4, decimal_places=2)
 
+
     def __str__(self):
         return self.name
