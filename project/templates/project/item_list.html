@@ -2,16 +2,56 @@
 
 
 {% block content %}
-<h1>Items</h1>
-<ul>
-{% for item in item_list %}
-<li>
 
-    {{item.name}} - {{item.price}}
-    Wt- {{item.weight}}
+<div class="main">
+    <div class="left">
+        <div class="block">
+            <p>Category:</p>
+            <div class="categories">
+                <div class="inner">
+                <div class="option">All</div>
+                {% for category in categories %}
+                    <div class="option">{{category}}</div>
+                {% endfor %}
+                </div>
 
-{% empty %}
-    <li>No items .</li>
-{% endfor %}
-</ul>
+            </div>
+        </div>
+
+
+
+        <div class="itemsContainer">
+            <ul>
+
+
+            {% for item in item_list %}
+            <li class="item">
+                <div class="top">
+                    <p>{{item.name}}</p>
+                    <p>Quant</p>
+                    <p>{{item.price}}$</p>
+                </div>
+
+                <div class="extra">
+
+                    Wt- {{item.weight}}
+                </div>
+
+
+
+
+
+
+            {% empty %}
+                <li>No items .</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="right">
+
+    </div>
+
+</div>
+
 {% endblock %}
