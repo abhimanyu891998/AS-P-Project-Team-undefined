@@ -31,7 +31,7 @@ class DispatchAllView(View):
             if order.status=='QUEUED_FOR_DISPATCH':
                 if totalWeight+order.total_weight<=25:
                     dispatchOrderList.append(order)
-                    print("HELLO" + order.status)
+                    print("HELLO " + order.status)
                     totalWeight = totalWeight + order.total_weight
                 
         

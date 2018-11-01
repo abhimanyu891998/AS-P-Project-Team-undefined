@@ -1,11 +1,25 @@
-<<<<<<< HEAD
-
-=======
 {% extends 'project/base.html' %}
->>>>>>> case/os
+{% load static %}
+{% block content %}
+<table style="border: 1px solid black;">
+<thead>
+        <th>Id:</th>
+        <th>Weight:</th>
+</thead>
 {% for order in dispatch_order_list %}
-<p>{{order.total_weight}}</p><br>
+
+    
+    <tr>
+        <td>Order Id: {{ order.id }}</td>
+        <td>Order Weight: {{ order.total_weight}}</td>
+    </tr>
 
 {% endfor %}
 
-</html>
+
+</table>
+<button id="dispatch">Dispatch</button> 
+<button id="genCSV">Generate CSV</button> 
+<script src="{% static 'js/dispatch.js' %}"></script>
+
+{% endblock %}
