@@ -20,7 +20,7 @@ from project import views
 
 urlpatterns = [
     
-    path('order/supplies', views.ItemsAllView.as_view(), name='items'),
+    path('orders/supplies', views.ItemsAllView.as_view(), name='items'),
     path('dispatch/', views.DispatchAllView.as_view(), name = 'dispatchqueue')
 
 

@@ -2,18 +2,6 @@
 
 {% block content %}
 
-<h1>Items</h1>
-<ul>
-{% for item in item_list %}
-<li>
-
-    {{item.name}} - {{item.price}}
-    Wt- {{item.weight}}
-
-{% empty %}
-    <li>No items .</li>
-{% endfor %}
-</ul>
 
 
 <div class="main">
@@ -42,11 +30,11 @@
                 <div class="top">
                     <p>{{item.name}}</p>
                     <div class="quantity">
-                        <div class="minus">
+                        <div class="minus" data-wt="{{item.weight}}" data-id="{{item.id}}">
                             -
                         </div>
                         <div class="value">0</div>
-                        <div class="plus" data-id="{{item.id}}">
+                        <div class="plus" data-wt="{{item.weight}}" data-id="{{item.id}}">
                             +
                         </div>
                     </div>

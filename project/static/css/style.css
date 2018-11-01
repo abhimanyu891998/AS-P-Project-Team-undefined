@@ -84,9 +84,10 @@ font-size: 24px;
 }
 
 .itemsContainer li.item .extra{
-
+    display: none;
 
 }
+
 
 .quantity{
     display: flex;
