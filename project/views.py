@@ -10,10 +10,16 @@ from project.models import *
 
 
 
+from project.models import Item, Category
+
 
 class ItemsAllView(ListView):
     model = Item
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
 
 class DispatchAllView(View):
@@ -36,3 +42,5 @@ class DispatchAllView(View):
 			'dispatch_order_list': dispatchOrderList
 		}
         return render(requests,'project/dispatch_list.html',context)
+
+
