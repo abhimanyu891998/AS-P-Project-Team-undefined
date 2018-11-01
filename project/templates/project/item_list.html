@@ -1,0 +1,12 @@
+<h1>Items</h1>
+<ul>
+{% for item in item_list %}
+<li>
+
+    {{item.name}} - {{item.price}}
+    Wt- {{item.weight}}
+
+{% empty %}
+    <li>No items .</li>
+{% endfor %}
+</ul>

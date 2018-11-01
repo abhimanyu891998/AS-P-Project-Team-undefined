@@ -16,8 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from project import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('orders/', include('project.urls')),
+    path('supplies', views.ItemsAllView.as_view(), name='items'),
 ]
