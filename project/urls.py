@@ -19,5 +19,9 @@ from django.urls import include, path
 from project import views
 
 urlpatterns = [
-    path('supplies', views.ItemsAllView.as_view(), name='items'),
+    
+    path('order/supplies', views.ItemsAllView.as_view(), name='items'),
+    path('dispatch/', views.DispatchAllView.as_view(), name = 'dispatchqueue')
+
+
 ]
