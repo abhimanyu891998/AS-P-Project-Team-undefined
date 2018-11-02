@@ -44,8 +44,7 @@ $(function(){
     $(".addToCart").on("click", function(){
 
         if(weight<=25.0 && weight>0){
-            let data = {obj:obj, totalWeight: weight};
-//            console.log(JSON.stringify(data))
+            let data = {obj:obj, totalWeight: weight.toFixed(4)};
             $.ajax({
               type: "POST",
               url: "/orders/supplies",
@@ -53,6 +52,10 @@ $(function(){
               data: JSON.stringify(data),
               success: function(){
                 console.log("Yay!")
+                window.alert("Your order has been successfully placed!");
+                $(".value").text(0)
+                weight=0.0;
+                obj = {};
               },
               error: function(e){
                 console.log(e)
@@ -60,9 +63,13 @@ $(function(){
             });
         }
         else{
-            window.alert("Exceeded!")
-            $(".errorMessage").show();
-            setTimeout($(".errorMessage").hide(), 2000);
+
+            let message = weight >0 ? "You have exceeded the maximum amount, please try again!" : "You haven't selected anything!";
+            window.alert(message)
+
+
+//            $(".errorMessage").show();
+//            setTimeout($(".errorMessage").hide(), 2000);
         }
 
     })
