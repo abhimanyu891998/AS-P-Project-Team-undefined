@@ -1,32 +1,32 @@
 {% extends 'project/base.html' %}
-
+{% load static %}
 {% block content %}
 
 
-
-<div class="main">
-    <div class="left">
-        <div class="block">
-            <p>Category:</p>
-            <div class="categories">
-                <div class="inner">
-                <div class="option">All</div>
-                {% for category in categories %}
-                    <div class="option">{{category}}</div>
-                {% endfor %}
-                </div>
-
-            </div>
+<div class="block">
+    <p>Category:</p>
+    <div class="categories">
+    <div class="dropdown">
+        <button class="dropbtn" style="background-image: url({% static 'img/arrow.svg' %})">Dropdown</button>
+        <div id="myDropdown" class="dropdown-content">
+            <a data-category="all" class="option">All</a>
+            {% for category in categories %}
+            <a data-category="{{category|slugify}}" class="option">{{category}}</a>
+            {% endfor %}
         </div>
+    </div>
+        </div>
+</div>
+<div class="main">
 
-
+    <div class="left">
 
         <div class="itemsContainer">
             <ul>
 
 
             {% for item in item_list %}
-            <li class="item">
+            <li class="item {{item.category|slugify}} all">
                 <div class="top">
                     <p>{{item.name}}</p>
                     <div class="quantity">
@@ -43,8 +43,10 @@
                 </div>
 
                 <div class="extra">
-                    <p>{{item.description}}</p>
-                    Wt- {{item.weight}}
+                    <div class="inner">
+                        <p>{{item.description}}</p>
+                        <p class="weight">Weight: {{item.weight}}</p>
+                    </div>
                 </div>
 
 
@@ -62,8 +64,14 @@
         <div class="summary">
             Summary
         </div>
+
         <div class="bottom">
-            <div class="addToCart">Add to Cart</div>
+            <div class="priority-check">
+                <div data-priority="L" class="active priority-item low">Low</div>
+                <div data-priority="M" class="priority-item medium">Medium</div>
+                <div data-priority="H" class="priority-item high">High</div>
+            </div>
+            <div class="addToCart">Place Order</div>
             <p>Maximum weight allowed: 25kg</p>
             <p class="errorMessage">Error: You have exceeded the maxmimum capacity (25.0 kgs)!</p>
         </div>

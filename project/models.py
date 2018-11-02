@@ -75,6 +75,12 @@ class Order(models.Model):
         ('DISPATCHED', 'Dispatched')
     )
     status = models.CharField(max_length=200,choices=STATUS_CHOICES,default='QUEUED_FOR_PROCESSING')
+    PRIORITIES= (
+        ('H', 'High'),
+        ('M', 'Medium'),
+        ('L', 'Low')
+    )
+    priority = models.CharField(max_length=200, choices=PRIORITIES, default='L')
     date = models.DateTimeField(default=datetime.now, blank=True)
     ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
