@@ -35,15 +35,15 @@ $(function(){
 
 
     $(".option").on("click", function(){
-        $(".inner").toggleClass("closed");
         let category = $(this).data("category")
         $(".item").hide();
         $(".item."+category).show();
+        $(".dropbtn")[0].innerHTML=category;
     })
 
     $(".addToCart").on("click", function(){
 
-        if(weight<=25.0){
+        if(weight<=25.0 && weight>0){
             let data = {obj:obj, totalWeight: weight};
 //            console.log(JSON.stringify(data))
             $.ajax({
@@ -66,5 +66,26 @@ $(function(){
         }
 
     })
+
+
+    $(".dropbtn").on("click", function(){
+        $(this).toggleClass("openCategories");
+        $("#myDropdown").toggleClass("show");
+    });
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
 
 });
