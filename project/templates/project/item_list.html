@@ -3,30 +3,28 @@
 {% block content %}
 
 
-
-<div class="main">
-    <div class="left">
-        <div class="block">
+<div class="block">
             <p>Category:</p>
             <div class="categories">
                 <div class="inner">
-                <div class="option">All</div>
+                <div data-category="all" class="option">All</div>
                 {% for category in categories %}
-                    <div class="option">{{category}}</div>
+                    <div data-category="{{category|slugify}}" class="option">{{category}}</div>
                 {% endfor %}
                 </div>
 
             </div>
         </div>
+<div class="main">
 
-
+    <div class="left">
 
         <div class="itemsContainer">
             <ul>
 
 
             {% for item in item_list %}
-            <li class="item">
+            <li class="item {{item.category|slugify}} all">
                 <div class="top">
                     <p>{{item.name}}</p>
                     <div class="quantity">
@@ -43,8 +41,10 @@
                 </div>
 
                 <div class="extra">
-                    <p>{{item.description}}</p>
-                    Wt- {{item.weight}}
+                    <div class="inner">
+                        <p>{{item.description}}</p>
+                        <p class="weight">Weight: {{item.weight}}</p>
+                    </div>
                 </div>
 
 

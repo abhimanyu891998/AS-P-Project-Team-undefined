@@ -30,6 +30,14 @@ $(function(){
       $(this).parent().next().slideToggle();
     })
 
+
+    $(".option").on("click", function(){
+        $(".inner").toggleClass("closed");
+        let category = $(this).data("category")
+        $(".item").hide();
+        $(".item."+category).show();
+    })
+
     $(".addToCart").on("click", function(){
 
         if(weight<=25.0){
