@@ -85,10 +85,10 @@ class DispatchAllView(View):
         if request.is_ajax():
 
             jData = json.loads(request.body)
-            orders = jData["obj"]
-            totalWeight = jData["totalWeight"]
+            orders = jData["name"]
+            
 
-            print("Working wjwdbdfjhqbfhjqwbfhjqbfjqbfjqwfdbvqjhfqwhjfbqwhjdfhjwqfjwqfhwfghw "+total_weight)
+            print("Working wjwdbdfjhqbfhjqwbfhjqbfjqbfjqwfdbvqjhfqwhjfbqwhjdfhjwqfjwqfhwfghw ")
 
             return HttpResponse(orders)
 

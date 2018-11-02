@@ -21,7 +21,7 @@ from project import views
 urlpatterns = [
     
     path('orders/supplies', views.ItemsAllView.as_view(), name='items'),
-    path('dispatch/', views.DispatchAllView.as_view(), name = 'dispatchqueue')
+    path('orders/dispatch', views.DispatchAllView.as_view(), name = 'dispatchqueue')
 
 
 ]
