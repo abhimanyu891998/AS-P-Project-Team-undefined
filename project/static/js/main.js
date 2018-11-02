@@ -1,6 +1,6 @@
 $(function(){
 
-    let obj = {}, weight = 0.0;
+    let obj = {}, weight = 0.0, priority="L";
 
     $(".plus").on("click", function(){
         if(obj[$(this).data("id")]) obj[$(this).data("id")]+=1
@@ -25,6 +25,7 @@ $(function(){
     $(".value").on("click", function(){
         console.log(obj);
         console.log(weight)
+        console.log(priority)
     });
 
 
@@ -33,6 +34,11 @@ $(function(){
       $(this).parent().next().slideToggle();
     })
 
+    $(".priority-item").on("click", function(){
+        $(".priority-item").removeClass("active");
+        $(this).addClass("active");
+        priority = $(this).data("priority");
+    });
 
     $(".option").on("click", function(){
         let category = $(this).data("category")
@@ -44,7 +50,7 @@ $(function(){
     $(".addToCart").on("click", function(){
 
         if(weight<=25.0 && weight>0){
-            let data = {obj:obj, totalWeight: weight.toFixed(4)};
+            let data = {obj:obj, totalWeight: weight.toFixed(4), priority: priority};
             $.ajax({
               type: "POST",
               url: "/orders/supplies",

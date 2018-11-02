@@ -181,6 +181,25 @@ font-size: 24px;
     flex-direction: column;
 }
 
+.right .bottom .priority-check{
+    display: flex;
+    margin: 20px auto;
+}
+
+.priority-check > * {
+    text-align: center;
+    border: 1px solid;
+    width: 60px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.priority-item.active{
+    background-color: #656565;
+    color: white;
+    border: 1px solid #000;
+}
+
 .addToCart{
     padding: 10px;
     background: #F14F5A;
