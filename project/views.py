@@ -45,3 +45,9 @@ class DispatchAllView(View):
     
 
 
+    def post(self,requests,*args,**kwargs):
+        print (args)
+        return render(request, self.template_name, {'form': form})
+    
+
+
