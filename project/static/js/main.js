@@ -34,16 +34,22 @@ $(function(){
 
         if(weight<=25.0){
             let data = {obj:obj, totalWeight: weight};
+//            console.log(JSON.stringify(data))
             $.ajax({
               type: "POST",
-              url: "http://localhost:8000/orders/supplies",
+              url: "/orders/supplies",
+              contentType: 'application/json',
               data: JSON.stringify(data),
               success: function(){
                 console.log("Yay!")
               },
+              error: function(e){
+                console.log(e)
+              }
             });
         }
         else{
+            window.alert("Exceeded!")
             $(".errorMessage").show();
             setTimeout($(".errorMessage").hide(), 2000);
         }
