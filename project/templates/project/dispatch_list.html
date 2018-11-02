@@ -1,27 +1,63 @@
 {% extends 'project/base.html' %}
 {% load static %}
 {% block content %}
-<table style="border: 1px solid black;">
-<thead>
-        <th>Id:</th>
-        <th>Weight:</th>
-</thead>
-{% for order in dispatch_order_list %}
-    
-    
-    <tr>
-        <td>Order Id: {{ order.id }}</td>
-        <td>Order Weight: {{ order.total_weight}}</td>
-    </tr>
 
-{% endfor %}
+
+<div id="contents">
+       
+</div>
 
 
 </table>
 <button id="dispatch" data-js-vars=”{{ dispatch_order_list }}”>Dispatch</button> 
 <button id="genCSV">Generate CSV</button> 
 
- <script> alert("{{dispatch_order_list}}".length)</script>
- <script src="{% static 'js/dispatch.js' %}"></script> 
+<script>
+    
+    var dispatch_button=document.getElementById("dispatch");
+    var gen_CSV_button=document.getElementById("genCSV");
+    var contents=document.getElementById("contents");
+    var dispatchOrderList={{ dispatch_order_list | safe}};
+    var toSendIds=[]
+
+
+
+    document.getElementsByTagName("body")[0].onload=putContentsInHtml()
+    
+
+    
+
+    dispatch_button.onclick=function(){
+        console.log(dispatchOrderList)
+        for(var i=0; i<dispatchOrderList.length;i++){
+            toSendIds.push(dispatchOrderList[i].pk);
+        }
+        console.log(toSendIds);
+    };
+
+
+    gen_CSV_button.onclick=function(){
+        
+    }
+
+
+
+    function putContentsInHtml(){
+        var tempString;
+        tempString = "<table border: 1px solid black;\"> <thead> <th> Order Id: </th> <th> Order Wt.</th> </thead>"
+        for(var i=0;i<dispatchOrderList.length;i++){
+            tempString+="<tr>"
+            tempString+="<td> "+dispatchOrderList[i].pk+"</td>";
+            tempString+="<td> "+dispatchOrderList[i].fields.total_weight+"</td>"
+            tempString+="<tr>"
+        }
+        tempString+="</table>"
+        console.log(tempString);
+        contents.innerHTML=tempString
+    }
+    
+
+        
+</script>
 
 {% endblock %}
