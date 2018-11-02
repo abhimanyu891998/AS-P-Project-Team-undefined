@@ -33,6 +33,13 @@
             toSendIds.push(dispatchOrderList[i].pk);
         }
         console.log(toSendIds);
+        $.ajax({
+            type: "POST",
+            url: '/dispatch',
+            data: toSendIds,
+            success: success
+            
+          });
     };
 
 

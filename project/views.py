@@ -31,7 +31,7 @@ class DispatchAllView(View):
             if order.status=='QUEUED_FOR_DISPATCH':
                 if totalWeight+order.total_weight<=25:
                     temp_list.append(order)
-                    print("HELLO " + order.status)
+                    print("HELLO" + order.status)
                     totalWeight = totalWeight + order.total_weight
                 
         
@@ -41,5 +41,7 @@ class DispatchAllView(View):
 			'dispatch_order_list': dispatch_order_list
 		}
         return render(requests,'project/dispatch_list.html',context)
+
+    
 
 
