@@ -14,8 +14,11 @@ $(function(){
             obj[$(this).data("id")]-=1
             $(this).next()[0].innerHTML = obj[$(this).data("id")];
             if (x==1) delete obj[$(this).data("id")]
+
+            weight -= parseFloat($(this).data("wt"))
         }
-        weight -= parseFloat($(this).data("wt"))
+
+
 
 
     });
