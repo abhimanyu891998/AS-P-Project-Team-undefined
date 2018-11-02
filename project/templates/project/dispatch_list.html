@@ -7,7 +7,7 @@
         <th>Weight:</th>
 </thead>
 {% for order in dispatch_order_list %}
-
+    
     
     <tr>
         <td>Order Id: {{ order.id }}</td>
@@ -18,8 +18,10 @@
 
 
 </table>
-<button id="dispatch">Dispatch</button> 
+<button id="dispatch" data-js-vars=”{{ dispatch_order_list }}”>Dispatch</button> 
 <button id="genCSV">Generate CSV</button> 
-<script src="{% static 'js/dispatch.js' %}"></script>
+
+ <script> alert("{{dispatch_order_list}}".length)</script>
+ <script src="{% static 'js/dispatch.js' %}"></script> 
 
 {% endblock %}
