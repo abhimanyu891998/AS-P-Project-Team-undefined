@@ -4,24 +4,17 @@ import json
 from django.shortcuts import render
 from django.views import View
 from django.views.generic.list import ListView
-<<<<<<< HEAD
 from django.core import serializers
-=======
 from django.http import HttpResponse
 from project.models import *
->>>>>>> bc642981b6fa32529b89d4b40e92ea774076b2e9
+from project.models import *
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
 
 
-<<<<<<< HEAD
-from project.models import *
-=======
-from project.models import Item, Category
-from django.views.decorators.csrf import csrf_protect
-from django.utils.decorators import method_decorator
->>>>>>> bc642981b6fa32529b89d4b40e92ea774076b2e9
 
 
 class ItemsAllView(View):
@@ -88,9 +81,19 @@ class DispatchAllView(View):
     
 
 
-    def post(self,requests,*args,**kwargs):
-        print (args)
-        return render(request, self.template_name, {'form': form})
+    def post(self, request):
+        if request.is_ajax():
+
+            jData = json.loads(request.body)
+            orders = jData["obj"]
+            totalWeight = jData["totalWeight"]
+
+            print("Working wjwdbdfjhqbfhjqwbfhjqbfjqbfjqwfdbvqjhfqwhjfbqwhjdfhjwqfjwqfhwfghw "+total_weight)
+
+            return HttpResponse(orders)
+
+
+
     
 
 

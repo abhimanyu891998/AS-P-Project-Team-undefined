@@ -1,5 +1,4 @@
 {% extends 'project/base.html' %}
-<<<<<<< HEAD
 {% load static %}
 {% block content %}
 
@@ -29,21 +28,44 @@
     
 
     dispatch_button.onclick=function(){
-        dispatch_order_list=[]
-        console.log(dispatchOrderList)
         for(var i=0; i<dispatchOrderList.length;i++){
             toSendIds.push(dispatchOrderList[i].pk);
         }
         console.log(toSendIds);
-       
+        dispatchOrderList=[]
         $.ajax({
-            type: "POST",
-            url: '/dispatch/',
-            data: toSendIds,
-            success: ()=>console.log("Done"),
-            credentials: 'include'
-          });
+              type: "POST",
+              url: "/orders/supplies",
+              contentType: 'application/json',
+              data: JSON.stringify(data),
+              success: function(){
+                console.log("Yay!")
+              },
+              error: function(e){
+                console.log(e)
+              }
+        });
 
+
+        // $.post("127.0.0.1:8000/dispatch/", 
+        //         {
+        //             name: "Donnald Trump"
+        //         },
+        //         (data,status)=>{console.log("Done")})
+
+
+        // var xmlhttp;
+        // if (window.XMLHttpRequest) {
+        //     xmlhttp = new XMLHttpRequest();
+        // } else {
+        //     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        // }
+        // xmlhttp.onreadystatechange = ()=>{console.log("Request successful")}
+        // xmlhttp.open("POST", "/dispatch/",true);
+        // xmlhttp.setRequestHeader("Content-type", "application/json");
+        // xmlhttp.send({name:"Shikhar"});
+                
+        
 
     };
 
@@ -66,15 +88,7 @@
         tempString+="</table>"
         console.log(tempString);
         contents.innerHTML=tempString
-    }
-    
-=======
-
-{% for order in dispatch_order_list %}
-<p>{{order.total_weight}}</p><br>
->>>>>>> bc642981b6fa32529b89d4b40e92ea774076b2e9
-
-        
+    }  
 </script>
 
 {% endblock %}
