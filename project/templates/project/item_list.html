@@ -2,18 +2,6 @@
 
 {% block content %}
 
-<h1>Items</h1>
-<ul>
-{% for item in item_list %}
-<li>
-
-    {{item.name}} - {{item.price}}
-    Wt- {{item.weight}}
-
-{% empty %}
-    <li>No items .</li>
-{% endfor %}
-</ul>
 
 
 <div class="main">
@@ -41,12 +29,21 @@
             <li class="item">
                 <div class="top">
                     <p>{{item.name}}</p>
-                    <p>Quant</p>
+                    <div class="quantity">
+                        <div class="minus" data-wt="{{item.weight}}" data-id="{{item.id}}">
+                            -
+                        </div>
+                        <div class="value">0</div>
+                        <div class="plus" data-wt="{{item.weight}}" data-id="{{item.id}}">
+                            +
+                        </div>
+                    </div>
                     <p>{{item.price}}$</p>
+                    <i class="arrow material-icons">arrow_drop_down</i>
                 </div>
 
                 <div class="extra">
-
+                    <p>{{item.description}}</p>
                     Wt- {{item.weight}}
                 </div>
 
@@ -62,6 +59,14 @@
         </div>
     </div>
     <div class="right">
+        <div class="summary">
+            Summary
+        </div>
+        <div class="bottom">
+            <div class="addToCart">Add to Cart</div>
+            <p>Maximum weight allowed: 25kg</p>
+            <p class="errorMessage">Error: You have exceeded the maxmimum capacity (25.0 kgs)!</p>
+        </div>
 
     </div>
 
