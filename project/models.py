@@ -20,6 +20,8 @@ class Item(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=4, decimal_places=2)
+    def __str__(self):
+        return str(self.name)
 
 
 class HospitalLocation(models.Model):
@@ -77,6 +79,8 @@ class Order(models.Model):
     ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     items = models.ManyToManyField(Item, through='OrderedItem')
+    def __str__(self):
+        return 'Order Id: ' + str(self.pk)
 
 class OrderedItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)

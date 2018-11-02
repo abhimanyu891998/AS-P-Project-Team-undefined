@@ -7,7 +7,6 @@ from django.views.generic.list import ListView
 from django.core import serializers
 from django.http import HttpResponse
 from project.models import *
-from project.models import *
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 
@@ -83,14 +82,13 @@ class DispatchAllView(View):
 
     def post(self, request):
         if request.is_ajax():
-
             jData = json.loads(request.body)
-            orders = jData["name"]
-            
+            ids = jData["ids"]   
 
-            print("Working wjwdbdfjhqbfhjqwbfhjqbfjqbfjqwfdbvqjhfqwhjfbqwhjdfhjwqfjwqfhwfghw ")
-
-            return HttpResponse(orders)
+            for id in ids :
+                Order.objects.filter(pk=id).update(status="DISPATCHED")
+                
+            return HttpResponse(ids)
 
 
 

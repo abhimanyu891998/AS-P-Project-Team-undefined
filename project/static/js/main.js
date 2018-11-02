@@ -16,7 +16,7 @@ $(function(){
             if (x==1) delete obj[$(this).data("id")]
         }
         weight -= parseFloat($(this).data("wt"))
-
+        
 
     });
     $(".value").on("click", function(){
@@ -41,7 +41,7 @@ $(function(){
               contentType: 'application/json',
               data: JSON.stringify(data),
               success: function(){
-                console.log("Yay!")
+                console.log("This request contains wt: "+weight+" & items "+obj)
               },
               error: function(e){
                 console.log(e)

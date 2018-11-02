@@ -19,52 +19,30 @@
     var contents=document.getElementById("contents");
     var dispatchOrderList={{ dispatch_order_list | safe}};
     var toSendIds=[]
+    var body=document.getElementsByTagName("body")[0]
 
 
-
-    document.getElementsByTagName("body")[0].onload=putContentsInHtml()
+    body.onload=putContentsInHtml()
     
    
     
 
     dispatch_button.onclick=function(){
+        
         for(var i=0; i<dispatchOrderList.length;i++){
             toSendIds.push(dispatchOrderList[i].pk);
         }
         console.log(toSendIds);
         dispatchOrderList=[]
         
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-              function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie != '') {
-                  var cookies = document.cookie.split(';');
-                  for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                      break;
-                    }
-                  }
-                }
-                return cookieValue;
-              }
-              if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                // Only send the token to relative URLs i.e. locally.
-                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-              }
-            }
-           }); 
-           
         $.ajax({
               type: "POST",
               url: "/orders/dispatch",
               contentType: 'application/json',
-              data: JSON.stringify({name: "hi"}),
+              data: JSON.stringify({ids:toSendIds}),
               success: function(){
-                console.log("Yay!")
+                   document.location.reload()
+                    
               },
               error: function(e){
                 console.log(e)
@@ -72,23 +50,6 @@
         });
 
 
-        // $.post("127.0.0.1:8000/dispatch/", 
-        //         {
-        //             name: "Donnald Trump"
-        //         },
-        //         (data,status)=>{console.log("Done")})
-
-
-        // var xmlhttp;
-        // if (window.XMLHttpRequest) {
-        //     xmlhttp = new XMLHttpRequest();
-        // } else {
-        //     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        // }
-        // xmlhttp.onreadystatechange = ()=>{console.log("Request successful")}
-        // xmlhttp.open("POST", "/dispatch/",true);
-        // xmlhttp.setRequestHeader("Content-type", "application/json");
-        // xmlhttp.send({name:"Shikhar"});
                 
         
 
@@ -102,17 +63,23 @@
 
 
     function putContentsInHtml(){
-        var tempString;
-        tempString = "<table border: 1px solid black;\"> <thead> <th> Order Id: </th> <th> Order Wt.</th> </thead>"
-        for(var i=0;i<dispatchOrderList.length;i++){
-            tempString+="<tr>"
-            tempString+="<td> "+dispatchOrderList[i].pk+"</td>";
-            tempString+="<td> "+dispatchOrderList[i].fields.total_weight+"</td>"
-            tempString+="<tr>"
+        if(dispatchOrderList.length==0){
+            contents.innerHTML="<h1> No Orders Yet. Please Wait...</h1>";
+            dispatch_button.disabled=true
+        }else{
+            var tempString;
+            tempString = "<table border: 1px solid black;\"> <thead> <th> Order Id: </th> <th> Order Wt.</th> </thead>"
+            for(var i=0;i<dispatchOrderList.length;i++){
+                tempString+="<tr>"
+                tempString+="<td> "+dispatchOrderList[i].pk+"</td>";
+                tempString+="<td> "+dispatchOrderList[i].fields.total_weight+"</td>"
+                tempString+="<tr>"
+            }
+            tempString+="</table>"
+            console.log(tempString);
+            contents.innerHTML=tempString
         }
-        tempString+="</table>"
-        console.log(tempString);
-        contents.innerHTML=tempString
+        
     }  
 </script>
 
