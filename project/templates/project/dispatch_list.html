@@ -3,16 +3,22 @@
 {% block content %}
 
 
-<div id="contents">
-       
-</div>
+<h1 class="next-drone">ON THE NEXT DRONE:</h1>
+<div class="dispatch-list">
 
 
-</table>
-<button id="dispatch" data-js-vars=”{{ dispatch_order_list }}”>Dispatch</button> 
-<button id="genCSV">Generate CSV</button> 
+    <div id="contents">
 
-<script>
+    </div>
+
+
+    <div class="buttons">
+        <button id="dispatch" data-js-vars=”{{ dispatch_order_list }}”>Dispatch</button>
+        <button id="genCSV">Generate CSV</button>
+    </div>
+
+
+    <script>
     
     var dispatch_button=document.getElementById("dispatch");
     var gen_CSV_button=document.getElementById("genCSV");
@@ -68,7 +74,7 @@
             dispatch_button.disabled=true
         }else{
             var tempString;
-            tempString = "<table border: 1px solid black;\"> <thead> <th> Order Id: </th> <th> Order Wt.</th> </thead>"
+            tempString = "<table> <thead> <th> Order ID </th> <th> Order Weight</th> </thead>"
             for(var i=0;i<dispatchOrderList.length;i++){
                 tempString+="<tr>"
                 tempString+="<td> "+dispatchOrderList[i].pk+"</td>";
@@ -81,6 +87,9 @@
         }
         
     }  
-</script>
+
+    </script>
+
+</div>
 
 {% endblock %}
