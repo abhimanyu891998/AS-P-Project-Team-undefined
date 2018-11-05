@@ -9,7 +9,8 @@ from django.http import HttpResponse
 from project.models import *
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
-
+from datetime import datetime
+from django.utils import timezone
 # Create your views here.
 
 
@@ -89,6 +90,7 @@ class DispatchAllView(View):
 
             for id in ids :
                 Order.objects.filter(pk=id).update(status="DISPATCHED")
+                Order.objects.filter(pk=id).update(dateDispatched=datetime.now().strftime('%Y-%m-%d %X'))
                 
             return HttpResponse(ids)
 
