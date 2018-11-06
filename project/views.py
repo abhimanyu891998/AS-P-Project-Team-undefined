@@ -3,12 +3,9 @@ from __future__ import unicode_literals
 import json
 from django.shortcuts import render
 from django.views import View
-from django.views.generic.list import ListView
 from django.core import serializers
 from django.http import HttpResponse
 from project.models import *
-from django.views.decorators.csrf import csrf_protect
-from django.utils.decorators import method_decorator
 
 # Create your views here.
 
