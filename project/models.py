@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+import os
 from django.db import models
 from datetime import datetime
 
@@ -8,6 +8,10 @@ from datetime import datetime
 # Create your models here.
 #
 #
+
+def image_path(instance, filename):
+	return os.path.join("img","itemImages",filename)
+
 class Category(models.Model):
     name = models.CharField(max_length=200)
 
@@ -18,6 +22,7 @@ class Item(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     price = models.DecimalField(max_digits=7, decimal_places=2)
+    image = models.ImageField(upload_to=image_path, blank=True, null=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=4, decimal_places=2)
     def __str__(self):
