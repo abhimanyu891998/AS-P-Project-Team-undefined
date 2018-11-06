@@ -81,12 +81,18 @@ class Order(models.Model):
         ('L', 'Low')
     )
     priority = models.CharField(max_length=200, choices=PRIORITIES, default='L')
-    date = models.DateTimeField(default=datetime.now, blank=True)
+    dateOrdered = models.DateTimeField(default=datetime.now, blank=True)
+    dateProcessed = models.DateTimeField(null=True,blank=True)
+    dateDispatched = models.DateTimeField(null=True,blank=True)
+    dateDelivered = models.DateTimeField(null=True,blank=True)
     ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     items = models.ManyToManyField(Item, through='OrderedItem')
     def __str__(self):
         return 'Order Id: ' + str(self.pk)
+
+  
+
 
 class OrderedItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
