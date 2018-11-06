@@ -43,6 +43,9 @@ class ClinicLocation(models.Model):
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     distance_from_supplying_hospital = models.DecimalField(max_digits=4, decimal_places=2)
 
+    def __str__(self):
+        return str(self.name)
+
 class InterClinicDistance(models.Model):
     location_a = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True, related_name='location_a')
     location_b = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True, related_name='location_b')
