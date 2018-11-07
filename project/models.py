@@ -31,14 +31,14 @@ class Item(models.Model):
 
 class HospitalLocation(models.Model):
     name = models.CharField(max_length=200)
-    latitute =  models.DecimalField(max_digits=9, decimal_places=6)
-    longitute = models.DecimalField(max_digits=9, decimal_places=6)
+    latitude =  models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
     altitude = models.DecimalField(max_digits=9, decimal_places=6)
 
 class ClinicLocation(models.Model):
     name = models.CharField(max_length=200)
-    latitute =  models.DecimalField(max_digits=9, decimal_places=6)
-    longitute = models.DecimalField(max_digits=9, decimal_places=6)
+    latitude =  models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
     altitude = models.DecimalField(max_digits=9, decimal_places=6)
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     distance_from_supplying_hospital = models.DecimalField(max_digits=4, decimal_places=2)
@@ -93,15 +93,13 @@ class Order(models.Model):
     dateProcessed = models.DateTimeField(null=True,blank=True)
     dateDispatched = models.DateTimeField(null=True,blank=True)
     dateDelivered = models.DateTimeField(null=True,blank=True)
-    #ordering_clinic = models.ForeignKey(ClinicLocation,default="ABC", on_delete=models.CASCADE, null=True)
+    ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     items = models.ManyToManyField(Item, through='OrderedItem')
     def __str__(self):
         return 'Order Id: ' + str(self.pk)
 
   
-
-
 class OrderedItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)

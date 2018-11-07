@@ -46,7 +46,8 @@
               url: "/orders/dispatch",
               contentType: 'application/json',
               data: JSON.stringify({ids:toSendIds}),
-              success: function(){
+              success: function(data){
+                  
                    document.location.reload()
                     
               },
@@ -62,8 +63,29 @@
     };
 
 
+
+
     gen_CSV_button.onclick=function(){
-        //code to gen csv here.
+
+        $.ajax({
+            type: "POST",
+            url: "/orders/dispatch/gencsv",
+            contentType: 'application/json',
+            data: JSON.stringify({ids:toSendIds}),
+            success: function(data){
+                
+                var blob=new Blob([data]);
+                var link=document.createElement('a');
+                link.href=window.URL.createObjectURL(blob);
+                link.download="disptach_itinerary.csv";
+                link.click();
+                  
+            },
+            error: function(e){
+              console.log(e)
+            }
+      });
+        
     }
 
 

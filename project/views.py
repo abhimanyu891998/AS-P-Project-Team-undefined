@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import json
+import csv
 from django.shortcuts import render
 from django.views import View
 from django.core import serializers
@@ -13,6 +14,7 @@ from datetime import datetime
 from django.utils import timezone
 
 # Create your views here.
+idsForCSV = []
 
 
 
@@ -85,15 +87,50 @@ class DispatchAllView(View):
 
 
     def post(self, request):
+       
+
+
         if request.is_ajax():
             jData = json.loads(request.body)
-            ids = jData["ids"]   
+            ids = jData["ids"]
+            global idsForCSV
+            idsForCSV = ids
+
+            
+
 
             for id in ids :
                 Order.objects.filter(pk=id).update(status="DISPATCHED")
                 Order.objects.filter(pk=id).update(dateDispatched=datetime.now().strftime('%Y-%m-%d %X'))
-                
+
             return HttpResponse(ids)
+
+
+class GenerateCSVAllView(View):
+
+    def post(self,request):
+        
+        
+            
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['Location Name','Latitude','Longitude','Altitude'])
+        for id in idsForCSV:
+            tempOrder = Order.objects.get(pk=id)
+            clinicOrder = ClinicLocation.objects.get(name=tempOrder.ordering_clinic)
+            clincOrderLatitude = clinicOrder.latitude
+            clincOrderLongitude = clinicOrder.latitude
+            clinicOrderAltitute = clinicOrder.altitude
+            writer.writerow([clinicOrder.name, clincOrderLatitude, clincOrderLongitude, clinicOrderAltitute])
+
+        hospitalDetails = HospitalLocation.objects.get(name="Queen Mary Hospital Drone Port")
+        writer.writerow([hospitalDetails.name,hospitalDetails.latitude,hospitalDetails.longitude,hospitalDetails.altitude])
+
+
+        return response
+
 
 
 
