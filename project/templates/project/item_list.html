@@ -28,6 +28,7 @@
             {% for item in item_list %}
             <li class="item {{item.category|slugify}} all">
                 <div class="top">
+                    <img src='/media/{{item.image}}' alt="">
                     <p>{{item.name}}</p>
                     <div class="quantity">
                         <div class="minus" data-wt="{{item.weight}}" data-id="{{item.id}}">
@@ -38,13 +39,12 @@
                             +
                         </div>
                     </div>
-                    <p>{{item.price}}$</p>
                     <i class="arrow material-icons">arrow_drop_down</i>
                 </div>
 
                 <div class="extra">
                     <div class="inner">
-                        <p>*IMAGE* {{item.description}}</p>
+                        <p>*{{item.image}}* {{item.description}}</p>
                         <p class="weight">Weight: {{item.weight}}kg</p>
                     </div>
                 </div>

@@ -346,3 +346,8 @@ font-size: 24px;
     cursor: pointer;
     margin-bottom: 40px;
 }
+
+img{
+    margin-left: 25px;
+    height: 100px;
+}

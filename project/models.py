@@ -21,8 +21,8 @@ class Category(models.Model):
 class Item(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
-    price = models.DecimalField(max_digits=7, decimal_places=2)
-    image = models.ImageField(upload_to=image_path, blank=True, null=True)
+    # price = models.DecimalField(max_digits=7, decimal_places=2)
+    image = models.ImageField(blank=True, null=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=4, decimal_places=2)
     def __str__(self):
