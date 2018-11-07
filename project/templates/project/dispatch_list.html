@@ -73,12 +73,16 @@
             contentType: 'application/json',
             data: JSON.stringify({ids:toSendIds}),
             success: function(data){
-                
+                if(data!= ''){
                 var blob=new Blob([data]);
                 var link=document.createElement('a');
                 link.href=window.URL.createObjectURL(blob);
                 link.download="disptach_itinerary.csv";
                 link.click();
+                
+                }
+                document.location.reload()
+                
                   
             },
             error: function(e){
@@ -93,7 +97,7 @@
     function putContentsInHtml(){
         if(dispatchOrderList.length==0){
             contents.innerHTML="<h1> No Orders Yet. Please Wait...</h1>";
-            dispatch_button.disabled=true
+            
         }else{
             var tempString;
             tempString = "<table> <thead> <th> Order ID </th> <th> Order Weight</th> </thead>"

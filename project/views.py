@@ -117,19 +117,26 @@ class GenerateCSVAllView(View):
 
         writer = csv.writer(response)
         writer.writerow(['Location Name','Latitude','Longitude','Altitude'])
-        for id in idsForCSV:
-            tempOrder = Order.objects.get(pk=id)
-            clinicOrder = ClinicLocation.objects.get(name=tempOrder.ordering_clinic)
-            clincOrderLatitude = clinicOrder.latitude
-            clincOrderLongitude = clinicOrder.latitude
-            clinicOrderAltitute = clinicOrder.altitude
-            writer.writerow([clinicOrder.name, clincOrderLatitude, clincOrderLongitude, clinicOrderAltitute])
+        if(len(idsForCSV)>0):
+            for id in idsForCSV:
+                tempOrder = Order.objects.get(pk=id)
+                clinicOrder = ClinicLocation.objects.get(name=tempOrder.ordering_clinic)
+                clincOrderLatitude = clinicOrder.latitude
+                clincOrderLongitude = clinicOrder.latitude
+                clinicOrderAltitute = clinicOrder.altitude
+                writer.writerow([clinicOrder.name, clincOrderLatitude, clincOrderLongitude, clinicOrderAltitute])
 
-        hospitalDetails = HospitalLocation.objects.get(name="Queen Mary Hospital Drone Port")
-        writer.writerow([hospitalDetails.name,hospitalDetails.latitude,hospitalDetails.longitude,hospitalDetails.altitude])
+            hospitalDetails = HospitalLocation.objects.get(name="Queen Mary Hospital Drone Port")
+            writer.writerow([hospitalDetails.name,hospitalDetails.latitude,hospitalDetails.longitude,hospitalDetails.altitude])
+            
 
+            return response
+        
+        else:
+            return HttpResponse('')
 
-        return response
+        
+            
 
 
 
