@@ -70,20 +70,28 @@ class DispatchAllView(View):
         temp_list = []
         for order in orders:
             if order.status=='QUEUED_FOR_DISPATCH':
-                if totalWeight+order.total_weight<=25:
-                    temp_list.append(order)
-                    print("HELLO" + order.status)
-                    totalWeight = totalWeight + order.total_weight
+                temp_list.append(order)
+                    
                 
+                
+              
         
+        temp_list.sort(key=lambda x: x.priority, reverse=True)
+        dispatch_order_list=[]
+        for order in temp_list:
+            if totalWeight+order.total_weight<=23.80:
+                dispatch_order_list.append(order)
+                print("HELLO" + order.status)
+                totalWeight = totalWeight + order.total_weight
 
-        dispatch_order_list = serializers.serialize('json', temp_list)
+        list_to_send=serializers.serialize('json', dispatch_order_list)
         context = {
-			'dispatch_order_list': dispatch_order_list
+			'dispatch_order_list': list_to_send
 		}
         return render(requests,'project/dispatch_list.html',context)
 
-    
+ 
+
 
 
     def post(self, request):

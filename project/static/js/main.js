@@ -1,6 +1,6 @@
 $(function(){
 
-    let obj = {}, weight = 0.0, priority="L";
+    let obj = {}, weight = 0.0, priority=-1;
 
     $(".plus").on("click", function(){
         if(obj[$(this).data("id")]) obj[$(this).data("id")]+=1
