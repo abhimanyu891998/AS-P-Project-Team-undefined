@@ -66,7 +66,7 @@ class User(models.Model):
         ('DISPATCHER', 'Dispatcher'),
     )
     role = models.CharField(max_length=200,choices=ROLE_CHOICES,default='CLINIC_MANAGER')
-    clinic_location = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
+    # clinic_location = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
 
 
     def __str__(self):
@@ -93,7 +93,7 @@ class Order(models.Model):
     dateProcessed = models.DateTimeField(null=True,blank=True)
     dateDispatched = models.DateTimeField(null=True,blank=True)
     dateDelivered = models.DateTimeField(null=True,blank=True)
-    ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
+    #ordering_clinic = models.ForeignKey(ClinicLocation,default="ABC", on_delete=models.CASCADE, null=True)
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     items = models.ManyToManyField(Item, through='OrderedItem')
     def __str__(self):

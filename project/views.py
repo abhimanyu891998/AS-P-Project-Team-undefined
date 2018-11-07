@@ -38,7 +38,7 @@ class ItemsAllView(View):
             if totalWeight:
                 order.total_weight = totalWeight
                 order.priority = priority
-                order.ordering_clinic = ClinicLocation.objects.get(id=1)
+                # order.ordering_clinic = ClinicLocation.objects.get(id=1)
                 order.supplying_hospital = HospitalLocation.objects.get(id=1)
                 order.save()
 
