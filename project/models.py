@@ -84,11 +84,11 @@ class Order(models.Model):
     )
     status = models.CharField(max_length=200,choices=STATUS_CHOICES,default='QUEUED_FOR_PROCESSING')
     PRIORITIES= (
-        ('H', 'High'),
-        ('M', 'Medium'),
-        ('L', 'Low')
+        ('1', 'High'),
+        ('0', 'Medium'),
+        ('-1', 'Low')
     )
-    priority = models.CharField(max_length=200, choices=PRIORITIES, default='L')
+    priority = models.CharField(max_length=200, choices=PRIORITIES, default=-1)
     dateOrdered = models.DateTimeField(default=datetime.now, blank=True)
     dateProcessed = models.DateTimeField(null=True,blank=True)
     dateDispatched = models.DateTimeField(null=True,blank=True)

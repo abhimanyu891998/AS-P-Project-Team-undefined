@@ -188,6 +188,9 @@ font-size: 24px;
     width: 60px;
     padding: 10px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .priority-item.active{

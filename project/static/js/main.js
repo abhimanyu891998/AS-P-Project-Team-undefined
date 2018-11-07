@@ -1,12 +1,13 @@
 $(function(){
 
-    let obj = {}, weight = 0.0, priority="L";
+    let obj = {}, weight = 0.0, priority=-1;
 
     $(".plus").on("click", function(){
         if(obj[$(this).data("id")]) obj[$(this).data("id")]+=1
         else obj[$(this).data("id")]=1
         $(this).prev()[0].innerHTML = obj[$(this).data("id")];
         weight += parseFloat($(this).data("wt"))
+        $("#current-weight").text(weight);
     });
     $(".minus").on("click", function(){
         var x = obj[$(this).data("id")];
@@ -16,6 +17,7 @@ $(function(){
             if (x==1) delete obj[$(this).data("id")]
 
             weight -= parseFloat($(this).data("wt"))
+            $("#current-weight").text(weight);
         }
 
 
