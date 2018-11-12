@@ -7,7 +7,7 @@ $(function(){
         else obj[$(this).data("id")]=1
         $(this).prev()[0].innerHTML = obj[$(this).data("id")];
         weight += parseFloat($(this).data("wt"))
-        $("#current-weight").text(weight);
+        $("#current-weight").text(weight.toFixed(4));
     });
     $(".minus").on("click", function(){
         var x = obj[$(this).data("id")];
@@ -17,7 +17,7 @@ $(function(){
             if (x==1) delete obj[$(this).data("id")]
 
             weight -= parseFloat($(this).data("wt"))
-            $("#current-weight").text(weight);
+            $("#current-weight").text(weight.toFixed(4));
         }
 
 
@@ -62,6 +62,7 @@ $(function(){
                 console.log("Yay!")
                 window.alert("Your order has been successfully placed!");
                 $(".value").text(0)
+                weight=0.0;
                 weight=0.0;
                 obj = {};
               },
