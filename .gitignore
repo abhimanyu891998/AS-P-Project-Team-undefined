@@ -2,6 +2,6 @@
 *.sqlite3
 *.pyc
 *.pyo
-__pycache__/
+project/__pycache__/
 venv/
-
+project/migrations/
