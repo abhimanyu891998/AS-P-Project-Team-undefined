@@ -22,7 +22,8 @@ urlpatterns = [
     
     path('orders/supplies', views.ItemsAllView.as_view(), name='items'),
     path('orders/dispatch', views.DispatchAllView.as_view(), name = 'dispatchqueue'),
-    path('orders/dispatch/gencsv', views.GenerateCSVAllView.as_view(), name='generatecsv')
+    path('orders/dispatch/gencsv', views.GenerateCSVAllView.as_view(), name='generatecsv'),
+    path('orders/warehouse', views.WarehouseProcessingView.as_view(), name='warehouseprocessing')
 
 
 

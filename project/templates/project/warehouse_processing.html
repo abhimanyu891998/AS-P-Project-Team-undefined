@@ -1,0 +1,101 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<h1 class="next-drone">QUEUED FOR PROCESSING:</h1>
+<div class="qfprocessing-list">
+
+
+    <div id="contents">
+
+    </div>
+    
+    <div class="buttons">
+        <button id="popqueue" data-js-vars=”{{ warehouse_order_list }}”>Pack Top Order</button>
+    </div>
+
+    <div id="orderDetails">
+
+    </div>
+
+
+
+    <script>
+    
+    var pop_button=document.getElementById("popqueue");
+    var contents=document.getElementById("contents");
+    var processingOrderDetail = document.getElementById("orderDetails");
+    var warehouseOrderList= {{ warehouse_order_list | safe }};
+    var toSendIds=[]
+    var body=document.getElementsByTagName("body")[0]
+
+
+   
+        
+    body.onload=putContentsInHtml();
+
+    pop_button.onclick=function(){
+
+        $.ajax({
+              type: "POST",
+              url: "/orders/warehouse",
+              contentType: 'application/json',
+              data: JSON.stringify({id:warehouseOrderList[0].pk}),
+              success: function(data){
+                    //here the server returns the new list and an object for which we need to display data 
+                    //data[0] is a list containing the first object 
+                    //data[1] is the list containg a list  
+
+                    jobj =JSON.parse(data.order)
+
+                    orderHtml = `
+                    <p>Order Details</p><br>
+                    <p>Total Weight: ${jobj[0].fields.total_weight} </p>
+                    <p>Priority: ${jobj[0].fields.priority}</p>
+                    <p>Ordering Clinic: ${jobj[0].fields.ordering_clinic}</p>
+                    
+                    `;
+                    processingOrderDetail.innerHTML = orderHtml
+                    
+
+
+
+
+ 
+                    
+              },
+              error: function(e){
+                console.log(e)  //important 
+              }
+        });
+
+    }
+
+    function putContentsInHtml(){
+        if(warehouseOrderList.length==0){
+            contents.innerHTML="<h1> No Orders Yet. Please Wait...</h1>";
+            
+        }
+        
+        else{
+            var tempString;
+            tempString = "<table> <thead> <th> Order ID </th> <th> Order Weight</th> </thead>"
+            for(var i=0;i<warehouseOrderList.length;i++){
+                tempString+="<tr>"
+                tempString+="<td> "+warehouseOrderList[i].pk+"</td>";
+                tempString+="<td> "+warehouseOrderList[i].fields.total_weight+"</td>"
+                tempString+="<tr>"
+            }
+            tempString+="</table>"
+            <!-- console.log(tempString); -->
+            contents.innerHTML=tempString
+        }
+        
+    }  
+
+    </script>
+
+</div>
+
+{% endblock %}
