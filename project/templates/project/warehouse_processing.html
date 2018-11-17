@@ -27,13 +27,19 @@
     var contents=document.getElementById("contents");
     var processingOrderDetail = document.getElementById("orderDetails");
     var warehouseOrderList= {{ warehouse_order_list | safe }};
+    var processingOrderList = {{ processing_order_list | safe}}
+    var orderList;
     var toSendIds=[]
     var body=document.getElementsByTagName("body")[0]
+
+    var ordersPopped="";
 
 
    
         
     body.onload=putContentsInHtml();
+    body.onload=displayOrders();
+
 
     pop_button.onclick=function(){
 
@@ -43,33 +49,17 @@
               contentType: 'application/json',
               data: JSON.stringify({id:warehouseOrderList[0].pk}),
               success: function(data){
-                    //here the server returns the new list and an object for which we need to display data 
-                    //data[0] is a list containing the first object 
-                    //data[1] is the list containg a list  
-
-                    jobj =JSON.parse(data.order)
-
-                    orderHtml = `
-                    <p>Order Details</p><br>
-                    <p>Total Weight: ${jobj[0].fields.total_weight} </p>
-                    <p>Priority: ${jobj[0].fields.priority}</p>
-                    <p>Ordering Clinic: ${jobj[0].fields.ordering_clinic}</p>
-                    
-                    `;
-                    processingOrderDetail.innerHTML = orderHtml
-                    
-
-
-
-
- 
-                    
+                    window.location.reload();
               },
               error: function(e){
                 console.log(e)  //important 
               }
         });
 
+    }
+
+    function generatePdf(elem){
+        alert(elem.id);
     }
 
     function putContentsInHtml(){
@@ -82,17 +72,33 @@
             var tempString;
             tempString = "<table> <thead> <th> Order ID </th> <th> Order Weight</th> </thead>"
             for(var i=0;i<warehouseOrderList.length;i++){
-                tempString+="<tr>"
-                tempString+="<td> "+warehouseOrderList[i].pk+"</td>";
+                tempString+="<tr>";
+                tempString+="<td> "+warehouseOrde+rList[i].pk+"</td>";
                 tempString+="<td> "+warehouseOrderList[i].fields.total_weight+"</td>"
                 tempString+="<tr>"
             }
             tempString+="</table>"
-            <!-- console.log(tempString); -->
-            contents.innerHTML=tempString
+
+            contents.innerHTML=tempString;
         }
         
     }  
+
+    function displayOrders(){
+            var ordersToDisplay="";
+            for(var i=0;i<processingOrderList.length;i++){
+                ordersToDisplay+="<hr>"+"<p>Order Details</p><br> "+
+                                "<p> Order Id: "+processingOrderList[i].pk+"</p>"+
+                                "<p>Total Weight:"+ processingOrderList[i].fields.total_weight +"</p>"+
+                                "<p>Priority:"+processingOrderList[i].fields.priority+"</p>"+
+                                "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic+"</p>"+
+                                "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
+            }   
+            processingOrderDetail.innerHTML=ordersToDisplay;  
+    }
+            
+    
+
 
     </script>
 
