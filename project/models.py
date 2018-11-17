@@ -14,7 +14,7 @@ def image_path(instance, filename):
     return os.path.join("img", "itemImages", filename)
 
 
-class User(Abstrac giot ser):
+class User(AbstractUser):
     CLINIC_MANAGER = 1
     WAREHOUSE_PERSONNEL = 2
     DISPATCHER = 3
