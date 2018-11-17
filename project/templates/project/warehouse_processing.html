@@ -64,6 +64,10 @@
 
     }
 
+    function generatePdf(elem){
+        alert(elem.id);
+    }
+
     function putContentsInHtml(){
         if(warehouseOrderList.length==0){
             contents.innerHTML="<h1> No Orders Yet. Please Wait...</h1>";
@@ -74,8 +78,8 @@
             var tempString;
             tempString = "<table> <thead> <th> Order ID </th> <th> Order Weight</th> </thead>"
             for(var i=0;i<warehouseOrderList.length;i++){
-                tempString+="<tr>"
-                tempString+="<td> "+warehouseOrderList[i].pk+"</td>";
+                tempString+="<tr>";
+                tempString+="<td> "+warehouseOrde+rList[i].pk+"</td>";
                 tempString+="<td> "+warehouseOrderList[i].fields.total_weight+"</td>"
                 tempString+="<tr>"
             }
@@ -94,7 +98,8 @@
                                 "<p> Order Id: "+processingOrderList[i].pk+"</p>"+
                                 "<p>Total Weight:"+ processingOrderList[i].fields.total_weight +"</p>"+
                                 "<p>Priority:"+processingOrderList[i].fields.priority+"</p>"+
-                                "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic+"</p>"+"<hr>";
+                                "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic+"</p>"+
+                                "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
             }   
             processingOrderDetail.innerHTML=ordersToDisplay;  
     }
