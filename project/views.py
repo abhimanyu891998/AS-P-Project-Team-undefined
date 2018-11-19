@@ -30,7 +30,12 @@ class ItemsAllView(View):
             'item_list': Item.objects.all(),
             'categories': Category.objects.all()
         }
-        return render(request, 'project/item_list.html', context)
+        if(self.request.user.role == 1):
+            return render(request, 'project/item_list.html', context)
+        else:
+            return render(request, 'project/unauthenticated.html', {})
+
+
 
     def post(self, request):
         if request.is_ajax():
@@ -92,7 +97,13 @@ class DispatchAllView(View):
         context = {
 			'dispatch_order_list': list_to_send
 		}
-        return render(requests,'project/dispatch_list.html',context)
+
+        if (self.request.user.role == 3):
+            return render(requests, 'project/dispatch_list.html', context)
+        else:
+            return render(requests, 'project/unauthenticated.html', {})
+
+
 
  
 
