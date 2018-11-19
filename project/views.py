@@ -11,11 +11,12 @@ from django.core.mail import send_mail
 from project.forms import RegistrationForm
 from project.models import *
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
 
-from django.views.decorators.csrf import csrf_protect
-from django.utils.decorators import method_decorator
 from datetime import datetime
-from django.utils import timezone
+
+from .forms import LoginForm
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 idsForCSV = []
@@ -23,6 +24,29 @@ idsForCSV = []
 
 
 
+class LoginView(View):
+    def get(self, request):
+        form = LoginForm
+        return render(request, 'project/login.html', {'form':form})
+    def post(self,request):
+        logout(request)
+        username = request.POST['username']
+        password = request.POST['password']
+        print (username)
+        print (password)
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            print("User role:")
+            print (user.role)
+            login(request, user)
+            return HttpResponseRedirect('/orders/supplies')
+        return render(request, 'project/login.html', {'form':LoginForm})
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect('/login')
 
 class ItemsAllView(View):
     def get(self, request, *args, **kwargs):
@@ -30,10 +54,11 @@ class ItemsAllView(View):
             'item_list': Item.objects.all(),
             'categories': Category.objects.all()
         }
-        if(self.request.user.role == 1):
-            return render(request, 'project/item_list.html', context)
-        else:
-            return render(request, 'project/unauthenticated.html', {})
+
+        if request.user.is_authenticated:
+            if(self.request.user.role == 1 or self.request.user.role == 5):
+                return render(request, 'project/item_list.html', context)
+        return render(request, 'project/unauthenticated.html', {})
 
 
 
@@ -246,7 +271,12 @@ class WarehouseProcessingView(View):
 			'warehouse_order_list': serializers.serialize('json', orders_to_process),
 			'processing_order_list': serializers.serialize('json', processing_list)
 		}
-        return render(requests,'project/warehouse_processing.html',context)
+
+        if (self.request.user.role == 2 or self.request.user.role == 5):
+            return render(requests, 'project/warehouse_processing.html', context)
+        else:
+            return render(requests, 'project/unauthenticated.html', {})
+
 
 
     def post(self, request):

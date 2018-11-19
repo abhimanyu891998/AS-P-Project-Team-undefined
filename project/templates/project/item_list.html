@@ -7,8 +7,8 @@
     <p>Category:</p>
     <div class="categories">
     <div class="dropdown">
-        <button class="dropbtn" style="background-image: url({% static 'img/arrow.svg' %})">Dropdown</button>
-        <div id="myDropdown" class="dropdown-content">
+        <button class="dropbtn categories" style="background-image: url({% static 'img/arrow.svg' %})">Dropdown</button>
+        <div id="dropdownCategories" class="dropdown-content">
             <a data-category="all" class="option">All</a>
             {% for category in categories %}
             <a data-category="{{category|slugify}}" class="option">{{category}}</a>

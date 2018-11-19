@@ -84,9 +84,14 @@ $(function(){
     })
 
 
-    $(".dropbtn").on("click", function(){
+    $(".dropbtn.categories").on("click", function(){
         $(this).toggleClass("openCategories");
-        $("#myDropdown").toggleClass("show");
+        $("#dropdownCategories").toggleClass("show");
+    });
+
+    $(".dropbtn.navbar").on("click", function(){
+        $(this).toggleClass("openCategories");
+        $(".navbarDropdown").toggleClass("show");
     });
 
     // Close the dropdown menu if the user clicks outside of it

@@ -22,6 +22,7 @@ class User(AbstractUser):
         (WAREHOUSE_PERSONNEL, 'WP'),
         (DISPATCHER, 'DI'),
         (ADMIN, 'AD'),
+        (DEF_USER, 'DU'),
     )
 
     name = models.CharField(max_length=200, blank=True)

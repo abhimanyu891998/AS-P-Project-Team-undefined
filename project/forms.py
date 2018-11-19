@@ -11,3 +11,7 @@ class RegistrationForm(forms.Form):
     username = forms.CharField(label='Username', max_length=100)
     password = forms.CharField(label='Password', max_length=50, widget=forms.PasswordInput)
     token = forms.CharField(label='Token', max_length=50)
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label='Username', max_length=100)
+    password = forms.CharField(label='Password', max_length=50, widget=forms.PasswordInput)
