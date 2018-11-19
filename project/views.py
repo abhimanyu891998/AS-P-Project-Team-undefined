@@ -5,8 +5,10 @@ import csv
 from django.shortcuts import render
 from django.views import View
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
+
+from project.forms import RegistrationForm
 from project.models import *
 from django.conf import settings
 
@@ -200,15 +202,58 @@ class WarehouseProcessingView(View):
 
             return HttpResponse(finalToSend,content_type='json')
 
+class RegistrationView(View):
+    def get(self, requests):
+        form = RegistrationForm
+        return render(requests, 'project/register.html', {'form': form})
 
+    def post(self,request):
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = User()
+            user.name = form.cleaned_data['name']
+            user.last_name = form.cleaned_data['last_name']
+            user.email = form.cleaned_data['email']
+            user.username = form.cleaned_data['username']
+            user.password = form.cleaned_data['password']
 
+            if str(form.cleaned_data['token']).startswith('cm'):
+                user.role = 1
+                user.save()
+                # clinicManager = ClinicManager()
+                # clinicManager.user = user
+                # clinic = ClinicLocation()
+                # # clinicManager.clinic = clinic
+                # clinicManager.save()
+                return HttpResponseRedirect('/clinicLocation_list/?username=%s' % user.username)
+            elif str(form.cleaned_data['token']).startswith('wp'):
+                user.role = 2
+                user.save()
+                return HttpResponseRedirect('/login')
+            elif str(form.cleaned_data['token']).startswith('di'):
+                user.role = 3
+                user.save()
+                return HttpResponseRedirect('/login')
+            elif str(form.cleaned_data['token']).startswith('ad'):
+                user.role = 4
+                user.save()
+                return HttpResponseRedirect('/admin')
+            else:
+                return HttpResponseRedirect('/register')
+        return HttpResponseRedirect('/register')
 
-        
-            
-
-
-
-
-    
-
-
+class ChooseClinicLocationView(View):
+    def get(self, requests):
+        context = {
+        'locations': ClinicLocation.objects.all(),
+        'username': requests.GET.get('username')
+        }
+        return render(requests, 'project/clinicLocation_list.html', context)
+    def post(self, request):
+        clinicManager = ClinicManager()
+        username = request.POST.get("username")
+        clinicManager.user = User.objects.get(username=username)
+        clinic = request.POST.get("location")
+        clinicManager.clinic = ClinicLocation.objects.get(name=clinic)
+        clinicManager.save()
+        return HttpResponseRedirect('/login')

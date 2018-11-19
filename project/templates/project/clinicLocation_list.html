@@ -1,0 +1,14 @@
+{% extends 'project/base.html' %}
+{% load static %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="username" value="{{username}}">
+    <select class="dropdown" name="location">
+            {% for location in locations %}
+            <option>{{location}}</option>
+            {% endfor %}
+        </select>
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
