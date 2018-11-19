@@ -94,6 +94,8 @@ class ClinicManager(models.Model):
 #     role = models.CharField(max_length=200,choices=ROLE_CHOICES,default='CLINIC_MANAGER')
 #     # clinic_location = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
 
+#     def __str__(self):
+#         return self.name
 
 #     def __str__(self):
 #         return self.name

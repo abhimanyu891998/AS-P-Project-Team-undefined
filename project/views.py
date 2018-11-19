@@ -98,7 +98,7 @@ class DispatchAllView(View):
 			'dispatch_order_list': list_to_send
 		}
 
-        if (self.request.user.role == 3):
+        if (self.request.user.role == 3 or self.request.user.role == 5):
             return render(requests, 'project/dispatch_list.html', context)
         else:
             return render(requests, 'project/unauthenticated.html', {})

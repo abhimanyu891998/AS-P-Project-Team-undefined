@@ -15,6 +15,7 @@ from . models import User
 admin.site.register(User, UserAdmin)
 admin.site.register(Category)
 admin.site.register(Item)
+# admin.site.register(User)
 admin.site.register(HospitalLocation)
 admin.site.register(ClinicLocation)
 admin.site.register(InterClinicDistance)
