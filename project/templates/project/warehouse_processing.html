@@ -13,7 +13,6 @@
     
     <div class="buttons">
         <button id="popqueue" data-js-vars=”{{ warehouse_order_list }}”>Pack Top Order</button>
-
     </div>
 
     <div id="orderDetails">
@@ -23,7 +22,7 @@
 
 
     <script>
-    
+
     var pop_button=document.getElementById("popqueue");
     var contents=document.getElementById("contents");
     var processingOrderDetail = document.getElementById("orderDetails");
@@ -36,15 +35,10 @@
     var ordersPopped="";
 
 
-   
-        
+
+
     body.onload=putContentsInHtml();
     body.onload=displayOrders();
-
-
-
-
-
 
 
     pop_button.onclick=function(){
@@ -55,10 +49,10 @@
               contentType: 'application/json',
               data: JSON.stringify({id:warehouseOrderList[0].pk}),
               success: function(data){
-                    window.location.reload();    
+                    window.location.reload();
               },
               error: function(e){
-                console.log(e)  //important 
+                console.log(e)  //important
               }
         });
 
@@ -71,15 +65,15 @@
     function putContentsInHtml(){
         if(warehouseOrderList.length==0){
             contents.innerHTML="<h1> No Orders Yet. Please Wait...</h1>";
-            
+
         }
-        
+
         else{
             var tempString;
             tempString = "<table> <thead> <th> Order ID </th> <th> Order Weight</th> </thead>"
             for(var i=0;i<warehouseOrderList.length;i++){
                 tempString+="<tr>";
-                tempString+="<td> "+warehouseOrde+rList[i].pk+"</td>";
+                tempString+="<td> "+warehouseOrderList[i].pk+"</td>";
                 tempString+="<td> "+warehouseOrderList[i].fields.total_weight+"</td>"
                 tempString+="<tr>"
             }
@@ -87,9 +81,8 @@
 
             contents.innerHTML=tempString;
         }
-        
-    }  
 
+    }
 
     function displayOrders(){
             var ordersToDisplay="";
@@ -100,11 +93,11 @@
                                 "<p>Priority:"+processingOrderList[i].fields.priority+"</p>"+
                                 "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic+"</p>"+
                                 "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
-            }   
-            processingOrderDetail.innerHTML=ordersToDisplay;  
+            }
+            processingOrderDetail.innerHTML=ordersToDisplay;
     }
-            
-    
+
+
 
 
     </script>

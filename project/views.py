@@ -80,11 +80,11 @@ class DispatchAllView(View):
         for order in orders:
             if order.status=='QUEUED_FOR_DISPATCH':
                 temp_list.append(order)
-                    
-                
-                
-              
-        
+
+
+
+
+
         temp_list.sort(key=lambda x: x.priority, reverse=True)
         dispatch_order_list=[]
         for order in temp_list:
@@ -105,12 +105,12 @@ class DispatchAllView(View):
 
 
 
- 
+
 
 
 
     def post(self, request):
-       
+
 
 
         if request.is_ajax():
@@ -119,7 +119,7 @@ class DispatchAllView(View):
             global idsForCSV
             idsForCSV = ids
 
-            
+
 
 
             for id in ids :
@@ -135,9 +135,9 @@ class DispatchAllView(View):
 class GenerateCSVAllView(View):
 
     def post(self,request):
-        
-        
-            
+
+
+
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
 
@@ -154,12 +154,69 @@ class GenerateCSVAllView(View):
 
             hospitalDetails = HospitalLocation.objects.get(name="Queen Mary Hospital Drone Port")
             writer.writerow([hospitalDetails.name,hospitalDetails.latitude,hospitalDetails.longitude,hospitalDetails.altitude])
-            
+
 
             return response
-        
+
         else:
             return HttpResponse('')
+
+
+class WarehouseProcessingView(View):
+
+    def get(self,requests, *args, **kwargs):
+        orders = Order.objects.all()
+        temp_list = []
+        for order in orders:
+            if order.status=='QUEUED_FOR_PROCESSING':
+                temp_list.append(order)
+
+
+
+
+
+        temp_list.sort(key=lambda x: x.priority, reverse=True)
+        warehouse_order_list=[]
+        for order in temp_list:
+                warehouse_order_list.append(order)
+                print("HELLO" + order.status)
+
+
+        list_to_send=serializers.serialize('json', warehouse_order_list)
+        context = {
+			'warehouse_order_list': list_to_send
+		}
+        return render(requests,'project/warehouse_processing.html',context)
+
+
+    def post(self, request):
+
+
+
+        if request.is_ajax():
+            jData = json.loads(request.body)
+            id = jData["id"]
+            # Order.objects.filter(pk=id).update(status="PROCESSING_BY_WAREHOUSE")
+
+            temp_list = []
+            for order in Order.objects.all():
+                if order.status=='QUEUED_FOR_PROCESSING':
+                    temp_list.append(order)
+
+            orderToSend = serializers.serialize('json',[Order.objects.get(pk=id),  ])
+            listToSend = serializers.serialize('json',temp_list)
+            d={}
+            d['order']=orderToSend
+            d['list']=listToSend
+            print (d)
+            finalToSend= json.dumps(d)
+
+            return HttpResponse(finalToSend,content_type='json')
+
+
+
+
+
 
 
 class WarehouseProcessingView(View):
@@ -173,17 +230,17 @@ class WarehouseProcessingView(View):
                 orders_to_process.append(order)
 
 
-        
+
         processing_list=[]
         for order in orders:
             if order.status=="PROCESSING_BY_WAREHOUSE":
                 processing_list.append(order)
-                
-              
-        
+
+
+
         orders_to_process.sort(key=lambda x: x.priority, reverse=True)
         processing_list.sort(key=lambda x: x.priority, reverse=True)
-      
+
 
         context = {
 			'warehouse_order_list': serializers.serialize('json', orders_to_process),
