@@ -50,6 +50,9 @@ class Item(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+
 class HospitalLocation(models.Model):
     name = models.CharField(max_length=200)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)

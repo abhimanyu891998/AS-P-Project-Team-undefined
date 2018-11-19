@@ -1,11 +1,16 @@
 {% extends 'project/base.html' %}
-{% load static %}
+
 {% block content %}
-<div> <form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Sign up">
-</form>
+<div class="loginForm signupForm">
+    <h1>Register</h1>
+    {% if error %}
+        <p class="error">{{error}}</p>
+    {% endif %}
+    <form class="formLoginForm" action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Sign Up">
+    </form>
 </div>
 
 {% endblock %}

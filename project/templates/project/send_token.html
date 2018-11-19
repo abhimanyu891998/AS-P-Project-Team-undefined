@@ -2,15 +2,11 @@
 
 {% block content %}
 <div class="loginForm">
-    <h1>Login</h1>
-    {% if error %}
-        <p class="error">{{error}}</p>
-    {% endif %}
-
+    <h1>Send Token</h1>
     <form class="formLoginForm" action="" method="POST">
         {% csrf_token %}
         {{form.as_p}}
-        <input type="submit" value="Submit">
+        <input type="submit" value="Send Token">
     </form>
 </div>
 

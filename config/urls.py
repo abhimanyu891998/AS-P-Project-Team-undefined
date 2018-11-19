@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from project.views import LoginView, LogoutView
+from project.views import LoginView, LogoutView, TokenSendView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('send-token/', TokenSendView.as_view(), name='send-token'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('', include('project.urls')),

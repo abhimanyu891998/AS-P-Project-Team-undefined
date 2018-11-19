@@ -12,17 +12,29 @@ from project.forms import RegistrationForm
 from project.models import *
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
-
+from django.db import IntegrityError
 from datetime import datetime
-
-from .forms import LoginForm
+from django.core import signing
+from .forms import LoginForm, TokenForm
 from django.http import HttpResponseRedirect
+import hashlib
 
 # Create your views here.
 idsForCSV = []
 
+class TokenSendView(View):
+    def get(self, request):
+        form = TokenForm
+        return render(request, 'project/send_token.html', {'form':form})
+    def post(self, request):
+        email = request.POST['email']
+        role = request.POST['role']
+        token = role + signing.dumps({'email':email})
+        send_mail("Registration Token for ASP", token, 'teamundefined18@gmail.com', [email], fail_silently=False)
 
+        # print(signing.loads(token[2:]))
 
+        return HttpResponse('<h1>Ha!</h1>')
 
 class LoginView(View):
     def get(self, request):
@@ -32,15 +44,11 @@ class LoginView(View):
         logout(request)
         username = request.POST['username']
         password = request.POST['password']
-        print (username)
-        print (password)
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            print("User role:")
-            print (user.role)
             login(request, user)
             return HttpResponseRedirect('/orders/supplies')
-        return render(request, 'project/login.html', {'form':LoginForm})
+        return render(request, 'project/login.html', {'form':LoginForm, 'error':'Invalid username or password!'})
 
 
 class LogoutView(View):
@@ -123,29 +131,18 @@ class DispatchAllView(View):
 			'dispatch_order_list': list_to_send
 		}
 
-        if (self.request.user.role == 3 or self.request.user.role == 5):
-            return render(requests, 'project/dispatch_list.html', context)
-        else:
-            return render(requests, 'project/unauthenticated.html', {})
-
-
-
-
-
+        if request.user.is_authenticated:
+            if(self.request.user.role == 3 or self.request.user.role == 5):
+                return render(request, 'project/item_list.html', context)
+        return render(request, 'project/unauthenticated.html', {})
 
 
     def post(self, request):
-
-
-
         if request.is_ajax():
             jData = json.loads(request.body)
             ids = jData["ids"]
             global idsForCSV
             idsForCSV = ids
-
-
-
 
             for id in ids :
                    # implement email here
@@ -211,13 +208,15 @@ class WarehouseProcessingView(View):
         context = {
 			'warehouse_order_list': list_to_send
 		}
-        return render(requests,'project/warehouse_processing.html',context)
+
+        if request.user.is_authenticated:
+            if(self.request.user.role == 2 or self.request.user.role == 5):
+                return render(requests, 'project/warehouse_processing.html', context)
+        return render(request, 'project/unauthenticated.html', {})
+
 
 
     def post(self, request):
-
-
-
         if request.is_ajax():
             jData = json.loads(request.body)
             id = jData["id"]
@@ -239,53 +238,6 @@ class WarehouseProcessingView(View):
             return HttpResponse(finalToSend,content_type='json')
 
 
-
-
-
-
-
-class WarehouseProcessingView(View):
-
-    def get(self,requests, *args, **kwargs):
-        orders = Order.objects.all()
-
-        orders_to_process= []
-        for order in orders:
-            if order.status=='QUEUED_FOR_PROCESSING':
-                orders_to_process.append(order)
-
-
-
-        processing_list=[]
-        for order in orders:
-            if order.status=="PROCESSING_BY_WAREHOUSE":
-                processing_list.append(order)
-
-
-
-        orders_to_process.sort(key=lambda x: x.priority, reverse=True)
-        processing_list.sort(key=lambda x: x.priority, reverse=True)
-
-
-        context = {
-			'warehouse_order_list': serializers.serialize('json', orders_to_process),
-			'processing_order_list': serializers.serialize('json', processing_list)
-		}
-
-        if (self.request.user.role == 2 or self.request.user.role == 5):
-            return render(requests, 'project/warehouse_processing.html', context)
-        else:
-            return render(requests, 'project/unauthenticated.html', {})
-
-
-
-    def post(self, request):
-        if request.is_ajax():
-            jData = json.loads(request.body)
-            id = jData["id"]
-            Order.objects.filter(pk=id).update(status="PROCESSING_BY_WAREHOUSE")
-            return HttpResponse()
-
 class RegistrationView(View):
     def get(self, requests):
         form = RegistrationForm
@@ -294,37 +246,45 @@ class RegistrationView(View):
     def post(self,request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = User()
-            user.name = form.cleaned_data['name']
-            user.last_name = form.cleaned_data['last_name']
-            user.email = form.cleaned_data['email']
-            user.username = form.cleaned_data['username']
-            user.password = form.cleaned_data['password']
+            try:
+                user = User()
+                user.name = form.cleaned_data['name']
+                user.last_name = form.cleaned_data['last_name']
 
-            if str(form.cleaned_data['token']).startswith('cm'):
-                user.role = 1
-                user.save()
-                # clinicManager = ClinicManager()
-                # clinicManager.user = user
-                # clinic = ClinicLocation()
-                # # clinicManager.clinic = clinic
-                # clinicManager.save()
-                return HttpResponseRedirect('/clinicLocation_list/?username=%s' % user.username)
-            elif str(form.cleaned_data['token']).startswith('wp'):
-                user.role = 2
-                user.save()
-                return HttpResponseRedirect('/login')
-            elif str(form.cleaned_data['token']).startswith('di'):
-                user.role = 3
-                user.save()
-                return HttpResponseRedirect('/login')
-            elif str(form.cleaned_data['token']).startswith('ad'):
-                user.role = 4
-                user.save()
-                return HttpResponseRedirect('/admin')
-            else:
-                return HttpResponseRedirect('/register')
-        return HttpResponseRedirect('/register')
+
+                token = str(form.cleaned_data['token'])
+                user.email = signing.loads(token[2:])['email']
+
+                user.username = form.cleaned_data['username']
+                user.set_password(form.cleaned_data['password'])
+
+                if token.startswith('cm'):
+                    user.role = 1
+                    user.save()
+                    return HttpResponseRedirect('/clinicLocation_list/?username=%s' % user.username)
+                elif token.startswith('wp'):
+                    user.role = 2
+                    user.save()
+                    return HttpResponseRedirect('/login')
+                elif token.startswith('di'):
+                    user.role = 3
+                    user.save()
+                    return HttpResponseRedirect('/login')
+                elif token.startswith('ad'):
+                    user.role = 4
+                    user.save()
+                    return HttpResponseRedirect('/admin')
+                else:
+                    return HttpResponseRedirect('/register')
+
+            except IntegrityError as e:
+                print (e.args)
+                if "UNIQUE constraint" in e.args[0]:
+                    form = RegistrationForm
+                    return render(request, 'project/register.html', {'form': form, 'error':'Invalid username or token!'})
+
+
+        return HttpResponseRedirect('/login')
 
 class ChooseClinicLocationView(View):
     def get(self, requests):
@@ -332,6 +292,7 @@ class ChooseClinicLocationView(View):
         'locations': ClinicLocation.objects.all(),
         'username': requests.GET.get('username')
         }
+
         return render(requests, 'project/clinicLocation_list.html', context)
     def post(self, request):
         clinicManager = ClinicManager()

@@ -378,6 +378,10 @@ img{
     border-radius: 8px;
 }
 
+.signupForm{
+    width: 450px;
+}
+
 .loginForm h1{
     text-align: center;
     margin-bottom: 20px;
@@ -387,11 +391,6 @@ img{
     display: flex;
     flex-direction: column;
 }
-
-
-git checkout -b f/a/r
-git pull origin f/a/r
-git pull f/a
 
 
 .formLoginForm input{
@@ -422,4 +421,12 @@ git pull f/a
     font-weight: 600;
     cursor: pointer;
     margin: 40px auto;
+}
+
+.error{
+    background: #fb4854e6;
+    padding: 15px 10px;
+    border-radius: 4px;
+    text-align: center;
+    color: white;
 }
