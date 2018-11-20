@@ -10,7 +10,7 @@
             <p>Weight: {{order.total_weight}}</p>
 
             <button class="notifyDelivery notifyDelivery-{{order.id}} {% if order.status == 'DELIVERED' %} notified {% endif %}" data-id="{{order.id}}">
-                {% if order.status == 'DELIVERED' %} Notified!
+                {% if order.status == 'DELIVERED' %} Delivered!
                 {% else  %} Notify Delivery!
                 {% endif %}
             </button>

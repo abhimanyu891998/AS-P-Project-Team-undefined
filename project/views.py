@@ -236,23 +236,19 @@ class WarehouseProcessingView(View):
         processing_list=[]
         for order in orders:
             if order.status=="PROCESSING_BY_WAREHOUSE":
-                # orderPack = []
-                # orderPack.append(order)
-                # orderPack.append(order.ordering_clinic)
-                # print(orderPack)
-
                 processing_list.append(order)
-
 
 
 
         orders_to_process.sort(key=lambda x: x.priority, reverse=True)
         processing_list.sort(key=lambda x: x.priority, reverse=True)
+        # print (orders_to_process[0].ordering_clinic)
+
 
 
         context = {
 			'warehouse_order_list': serializers.serialize('json', orders_to_process),
-			 'processing_order_list': serializers.serialize('json', processing_list)
+			'processing_order_list': serializers.serialize('json', processing_list),
 		}
 
         if requests.user.is_authenticated:

@@ -437,9 +437,13 @@ img{
     width: 150px;
     border-radius: 8px;
     padding: 10px;
+    cursor: pointer;
 }
+
+
 
 .notifyDelivery.notified{
     background: #f04f5a;
     color: white;
+    cursor: not-allowed;
 }

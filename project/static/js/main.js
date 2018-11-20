@@ -122,7 +122,7 @@ $(function(){
             contentType: 'application/json',
             data: JSON.stringify({id:id}),
             success: function(data){
-                $(".notifyDelivery-"+id).text("Delivered")
+                $(".notifyDelivery-"+id).text("Delivered!")
                 $(".notifyDelivery-"+id).addClass("notified")
                 $(".notifyDelivery-"+id).attr("disabled", "disabled");
                 window.alert("Success!")
