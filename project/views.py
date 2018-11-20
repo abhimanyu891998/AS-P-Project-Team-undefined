@@ -289,7 +289,7 @@ class WarehousePDFView(View):
         pdfContent = 'Order ID:' + ' ' +  str(shippingOrderId) + ' '
         pdfContent = pdfContent + 'Final Destination:' + ' ' + str(shippingOrder.ordering_clinic) + ' ' +  ' ' + 'Items:'
         p.drawString(100,100,pdfContent)
-        ctr = 1000
+        ctr = 700
         for orderedItem in OrderItemList:
             ctr = ctr - 100
             p.drawString(100,ctr,orderedItem.item.name)
@@ -298,6 +298,7 @@ class WarehousePDFView(View):
 
         p.showPage()
         p.save()
+        ctr=700
         Order.objects.filter(pk=shippingOrderId).update(status="QUEUED_FOR_DISPATCH")
         Order.objects.filter(pk=shippingOrderId).update(dateProcessed=datetime.now().strftime('%Y-%m-%d %X'))
 
