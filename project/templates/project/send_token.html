@@ -1,0 +1,13 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="loginForm">
+    <h1>Send Token</h1>
+    <form class="formLoginForm" action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Send Token">
+    </form>
+</div>
+
+{% endblock %}

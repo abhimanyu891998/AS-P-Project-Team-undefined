@@ -22,7 +22,7 @@
 
 
     <script>
-    
+
     var pop_button=document.getElementById("popqueue");
     var contents=document.getElementById("contents");
     var processingOrderDetail = document.getElementById("orderDetails");
@@ -34,9 +34,6 @@
 
     var ordersPopped="";
 
-
-   
-        
     body.onload=putContentsInHtml();
     body.onload=displayOrders();
 
@@ -52,13 +49,14 @@
                     window.location.reload();
               },
               error: function(e){
-                console.log(e)  //important 
+                console.log(e)  //important
               }
         });
 
     }
 
     function generatePdf(elem){
+
         
             $.ajax({
             type: "POST",
@@ -85,14 +83,15 @@
             }
       });
 
+
     }
 
     function putContentsInHtml(){
         if(warehouseOrderList.length==0){
             contents.innerHTML="<h1> No Orders Yet. Please Wait...</h1>";
-            
+
         }
-        
+
         else{
             var tempString;
             tempString = "<table> <thead> <th> Order ID </th> <th> Order Weight</th> </thead>"
@@ -106,8 +105,24 @@
 
             contents.innerHTML=tempString;
         }
-        
-    }  
+
+    }
+
+    function displayOrders(){
+            var ordersToDisplay="";
+            for(var i=0;i<processingOrderList.length;i++){
+                ordersToDisplay+="<hr>"+"<p>Order Details</p><br> "+
+                                "<p> Order Id: "+processingOrderList[i].pk+"</p>"+
+                                "<p>Total Weight:"+ processingOrderList[i].fields.total_weight +"</p>"+
+                                "<p>Priority:"+processingOrderList[i].fields.priority+"</p>"+
+                                "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic+"</p>"+
+                                "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
+            }
+            processingOrderDetail.innerHTML=ordersToDisplay;
+    }
+
+
+
 
     function displayOrders(){
             var ordersToDisplay="";

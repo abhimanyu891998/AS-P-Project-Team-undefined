@@ -1,0 +1,17 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="loginForm">
+    <h1>Login</h1>
+    {% if error %}
+        <p class="error">{{error}}</p>
+    {% endif %}
+
+    <form class="formLoginForm" action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock %}

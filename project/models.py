@@ -9,11 +9,8 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 #
 #
-
 def image_path(instance, filename):
     return os.path.join("img", "itemImages", filename)
-
-
 class User(AbstractUser):
     CLINIC_MANAGER = 1
     WAREHOUSE_PERSONNEL = 2
@@ -26,6 +23,7 @@ class User(AbstractUser):
         (WAREHOUSE_PERSONNEL, 'WP'),
         (DISPATCHER, 'DI'),
         (ADMIN, 'AD'),
+        (DEF_USER, 'DU'),
     )
 
     name = models.CharField(max_length=200, blank=True)
@@ -39,7 +37,6 @@ class User(AbstractUser):
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
-
     def __str__(self):
         return self.name
 
@@ -56,6 +53,7 @@ class Item(models.Model):
         return str(self.name)
 
 
+
 class HospitalLocation(models.Model):
     name = models.CharField(max_length=200)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
@@ -70,7 +68,6 @@ class ClinicLocation(models.Model):
     altitude = models.DecimalField(max_digits=9, decimal_places=6)
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     distance_from_supplying_hospital = models.DecimalField(max_digits=4, decimal_places=2)
-
     def __str__(self):
         return str(self.name)
 
@@ -102,6 +99,11 @@ class ClinicManager(models.Model):
 #     role = models.CharField(max_length=200,choices=ROLE_CHOICES,default='CLINIC_MANAGER')
 #     # clinic_location = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
 
+#     def __str__(self):
+#         return self.name
+
+#     def __str__(self):
+#         return self.name
 
 #     def __str__(self):
 #         return self.name
@@ -126,7 +128,7 @@ class Order(models.Model):
     dateProcessed = models.DateTimeField(null=True, blank=True)
     dateDispatched = models.DateTimeField(null=True, blank=True)
     dateDelivered = models.DateTimeField(null=True, blank=True)
-    ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True, )
+    ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     items = models.ManyToManyField(Item, through='OrderedItem')
 
@@ -141,5 +143,3 @@ class OrderedItem(models.Model):
 
     def __str__(self):
         return 'Order Number:' + str(self.order.pk)
-
-   

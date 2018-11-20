@@ -12,6 +12,15 @@
     <div class="header">
         <h1 class="logo"><a href="#">ASP</a></h1>
 
+        {% if user.is_authenticated %}
+        <div class="dropdown">
+            <button class="dropbtn navbar"></button>
+            <div id="myDropdown" class="navbarDropdown dropdown dropdown-content">
+                <a href="{% url 'logout' %}" class="option">Logout</a>
+            </div>
+        </div>
+        {% endif %}
+
     </div>
     <div class="main-content">
         {% block content %}
