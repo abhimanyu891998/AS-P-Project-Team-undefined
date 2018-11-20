@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import json
+import jsonpickle
 import csv
+import io
 from django.shortcuts import render
 from django.views import View
 from django.core import serializers
@@ -9,6 +11,8 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from project.models import *
 from django.conf import settings
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
 
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
@@ -176,7 +180,13 @@ class WarehouseProcessingView(View):
         processing_list=[]
         for order in orders:
             if order.status=="PROCESSING_BY_WAREHOUSE":
+                # orderPack = []
+                # orderPack.append(order)
+                # orderPack.append(order.ordering_clinic)
+                # print(orderPack)
+                
                 processing_list.append(order)
+                
                 
               
         
@@ -186,8 +196,11 @@ class WarehouseProcessingView(View):
 
         context = {
 			'warehouse_order_list': serializers.serialize('json', orders_to_process),
-			'processing_order_list': serializers.serialize('json', processing_list)
+			 'processing_order_list': serializers.serialize('json', processing_list)
+            
+
 		}
+       
         return render(requests,'project/warehouse_processing.html',context)
 
 
@@ -197,6 +210,48 @@ class WarehouseProcessingView(View):
             id = jData["id"]
             Order.objects.filter(pk=id).update(status="PROCESSING_BY_WAREHOUSE")
             return HttpResponse()
+
+
+
+class WarehousePDFView(View):
+
+    def post(self,request):
+
+        if request.is_ajax():
+            jData = json.loads(request.body)
+            shippingOrderId = jData["id"]
+
+            
+        response = HttpResponse(content_type='text/pdf')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+        # Create the PDF object, using the buffer as its "file."
+        p = canvas.Canvas(response)
+
+        # Draw things on the PDF. Here's where the PDF generation happens.
+        # See the ReportLab documentation for the full list of functionality.
+
+        shippingOrder = Order.objects.get(pk=shippingOrderId)
+        OrderItemList = OrderedItem.objects.all().filter(order=shippingOrderId)
+        pdfContent = 'Order ID:' + ' ' +  str(shippingOrderId) + ' '
+        pdfContent = pdfContent + 'Final Destination:' + ' ' + str(shippingOrder.ordering_clinic) + ' ' +  ' ' + 'Items:'
+        p.drawString(100,100,pdfContent)
+        ctr = 1000
+        for orderedItem in OrderItemList:
+            ctr = ctr - 100
+            p.drawString(100,ctr,orderedItem.item.name)
+
+        # Close the PDF object cleanly, and we're done.
+        
+        p.showPage()
+        p.save()
+        Order.objects.filter(pk=shippingOrderId).update(status="QUEUED_FOR_DISPATCH")
+        Order.objects.filter(pk=shippingOrderId).update(dateProcessed=datetime.now().strftime('%Y-%m-%d %X'))
+        
+        # FileResponse sets the Content-Disposition header so that browsers
+        # present the option to save the file.
+        return response
+            
 
 
 

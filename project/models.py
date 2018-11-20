@@ -126,15 +126,20 @@ class Order(models.Model):
     dateProcessed = models.DateTimeField(null=True, blank=True)
     dateDispatched = models.DateTimeField(null=True, blank=True)
     dateDelivered = models.DateTimeField(null=True, blank=True)
-    ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True)
+    ordering_clinic = models.ForeignKey(ClinicLocation, on_delete=models.CASCADE, null=True, )
     supplying_hospital = models.ForeignKey(HospitalLocation, on_delete=models.CASCADE, null=True)
     items = models.ManyToManyField(Item, through='OrderedItem')
 
     def __str__(self):
-        return 'Order Id: ' + str(self.pk)
+        return str(self.pk)
 
 
 class OrderedItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return 'Order Number:' + str(self.order.pk)
+
+   

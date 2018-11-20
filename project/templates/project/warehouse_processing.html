@@ -59,7 +59,32 @@
     }
 
     function generatePdf(elem){
-        alert(elem.id);
+        
+            $.ajax({
+            type: "POST",
+            url: "/orders/warehouse/genpdf",
+            contentType: 'application/json',
+            data: JSON.stringify({id:elem.id}),
+            success: function(data){
+                 
+                if(data!= ''){
+                var blob=new Blob([data]);
+                var link=document.createElement('a');
+                link.href=window.URL.createObjectURL(blob);
+                link.download="shippinglabel.pdf";
+                link.click(); 
+                
+                }
+                document.location.reload()
+                
+                  
+            },
+            error: function(e){
+              console.log(e)
+              
+            }
+      });
+
     }
 
     function putContentsInHtml(){
@@ -87,11 +112,12 @@
     function displayOrders(){
             var ordersToDisplay="";
             for(var i=0;i<processingOrderList.length;i++){
+                console.log(processingOrderList[i])
                 ordersToDisplay+="<hr>"+"<p>Order Details</p><br> "+
                                 "<p> Order Id: "+processingOrderList[i].pk+"</p>"+
                                 "<p>Total Weight:"+ processingOrderList[i].fields.total_weight +"</p>"+
                                 "<p>Priority:"+processingOrderList[i].fields.priority+"</p>"+
-                                "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic+"</p>"+
+                                "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic.name+"</p>"+
                                 "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
             }   
             processingOrderDetail.innerHTML=ordersToDisplay;  

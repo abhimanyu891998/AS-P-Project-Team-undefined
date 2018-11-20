@@ -7,6 +7,8 @@ name = "pypi"
 
 [packages]
 pillow = "*"
+jsonpickle = "*"
+reportlab = "*"
 
 [requires]
 python_version = "2.7"
