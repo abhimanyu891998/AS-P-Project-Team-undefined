@@ -61,9 +61,10 @@ $(function(){
               success: function(){
                 console.log("Yay!")
                 window.alert("Your order has been successfully placed!");
+                weight=0.0;
+                $("#current-weight").text(weight.toFixed(4));
                 $(".value").text(0)
-                weight=0.0;
-                weight=0.0;
+
                 obj = {};
               },
               error: function(e){

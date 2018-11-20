@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import json
-import jsonpickle
 import csv
 import io
 from django.shortcuts import render
@@ -53,7 +52,12 @@ class LoginView(View):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect('/orders/supplies')
+            if user.role == 1:
+                return HttpResponseRedirect('/orders/supplies')
+            elif user.role== 2:
+                return HttpResponseRedirect('/orders/warehouse')
+            elif user.role== 3:
+                return HttpResponseRedirect('/orders/dispatch')
         return render(request, 'project/login.html', {'form':LoginForm, 'error':'Invalid username or password!'})
 
 
@@ -87,9 +91,13 @@ class ItemsAllView(View):
             order = Order()
             if totalWeight:
                 order.total_weight = totalWeight
+                print("Haha")
+                print(self.request.user)
+                order.ordering_clinic = ClinicManager.objects.get(user=self.request.user).clinic
                 order.priority = priority
                 # order.ordering_clinic = ClinicLocation.objects.get()
-                # order.supplying_hospital = HospitalLocation.objects.get()
+
+                order.supplying_hospital = HospitalLocation.objects.get(name="Queen Mary Hospital Drone Port")
                 order.save()
 
             print(orders)
@@ -112,7 +120,7 @@ class ItemsAllView(View):
 
 
 class DispatchAllView(View):
-    def get(self,requests, *args, **kwargs):
+    def get(self,request, *args, **kwargs):
         orders = Order.objects.all()
         totalWeight=0
         temp_list = []
@@ -139,7 +147,7 @@ class DispatchAllView(View):
 
         if request.user.is_authenticated:
             if(self.request.user.role == 3 or self.request.user.role == 5):
-                return render(request, 'project/item_list.html', context)
+                return render(request, 'project/dispatch_list.html', context)
         return render(request, 'project/unauthenticated.html', {})
 
 
@@ -152,8 +160,8 @@ class DispatchAllView(View):
 
             for id in ids :
                    # implement email here
-                send_mail("SE", "Delivery dispatched", 'teamundefined18@gmail.com', ['manvibansal75@gmail.com'],
-                fail_silently=False)
+                # send_mail("SE", "Delivery dispatched", 'teamundefined18@gmail.com', ['manvibansal75@gmail.com'],
+                # fail_silently=False)
                 Order.objects.filter(pk=id).update(status="DISPATCHED")
                 Order.objects.filter(pk=id).update(dateDispatched=datetime.now().strftime('%Y-%m-%d %X'))
 
@@ -223,16 +231,12 @@ class WarehouseProcessingView(View):
         context = {
 			'warehouse_order_list': serializers.serialize('json', orders_to_process),
 			 'processing_order_list': serializers.serialize('json', processing_list)
-
-
 		}
 
-        return render(requests,'project/warehouse_processing.html',context)
-
-        if request.user.is_authenticated:
+        if requests.user.is_authenticated:
             if(self.request.user.role == 2 or self.request.user.role == 5):
                 return render(requests, 'project/warehouse_processing.html', context)
-        return render(request, 'project/unauthenticated.html', {})
+        return render(requests, 'project/unauthenticated.html', {})
 
     def post(self, request):
         if request.is_ajax():
@@ -245,7 +249,7 @@ class WarehouseProcessingView(View):
 
 class WarehousePDFView(View):
 
-    def post(self,request):
+
 
     def post(self, request):
         if request.is_ajax():
