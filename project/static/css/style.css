@@ -430,3 +430,16 @@ img{
     text-align: center;
     color: white;
 }
+
+
+
+.notifyDelivery{
+    width: 150px;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.notifyDelivery.notified{
+    background: #f04f5a;
+    color: white;
+}

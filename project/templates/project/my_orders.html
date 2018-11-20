@@ -1,0 +1,23 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="myOrders">
+
+<ul>
+    {% for order in myorders %}
+        <li style="margin: 20px;display: flex; justify-content: space-between;width: 30%">
+            <p>Order_id: {{order.id}}</p>
+            <p>Weight: {{order.total_weight}}</p>
+
+            <button class="notifyDelivery notifyDelivery-{{order.id}} {% if order.status == 'DELIVERED' %} notified {% endif %}" data-id="{{order.id}}">
+                {% if order.status == 'DELIVERED' %} Notified!
+                {% else  %} Notify Delivery!
+                {% endif %}
+            </button>
+        </li>
+    {% endfor %}
+</ul>
+</div>
+
+
+{% endblock %}

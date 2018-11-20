@@ -116,7 +116,8 @@ class Order(models.Model):
         ('QUEUED_FOR_PROCESSING', 'Queued for Processing'),
         ('PROCESSING_BY_WAREHOUSE', 'Processing by Warehouse'),
         ('QUEUED_FOR_DISPATCH', 'Queued for Dispatch'),
-        ('DISPATCHED', 'Dispatched')
+        ('DISPATCHED', 'Dispatched'),
+        ('DELIVERED', 'Delivered')
     )
     status = models.CharField(max_length=200, choices=STATUS_CHOICES, default='QUEUED_FOR_PROCESSING')
     PRIORITIES = (

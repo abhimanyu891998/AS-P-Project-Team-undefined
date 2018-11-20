@@ -66,6 +66,28 @@ class LogoutView(View):
         logout(request)
         return HttpResponseRedirect('/login')
 
+class MyOrdersView(View):
+    def get(self, request, *args, **kwargs):
+        myorders = Order.objects.all().filter(ordering_clinic = ClinicManager.objects.get(user=self.request.user).clinic)
+        context = {
+            'myorders': myorders
+        }
+        if request.user.is_authenticated:
+            if(self.request.user.role == 1 or self.request.user.role == 5):
+                return render(request, 'project/my_orders.html', context)
+        return render(request, 'project/unauthenticated.html', {})
+
+    def post(self, request):
+
+        print ("IDDDDDD: ")
+        jData = json.loads(request.body)
+        id = jData["id"]
+
+        print(id)
+        Order.objects.all().filter(pk=id).update(status="DELIVERED")
+        Order.objects.all().filter(pk=id).update(dateDelivered=datetime.now().strftime('%Y-%m-%d %X'))
+        return HttpResponse(request)
+
 class ItemsAllView(View):
     def get(self, request, *args, **kwargs):
         context = {
