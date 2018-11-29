@@ -27,7 +27,7 @@
     var contents=document.getElementById("contents");
     var processingOrderDetail = document.getElementById("orderDetails");
     var warehouseOrderList= {{ warehouse_order_list | safe }};
-    var processingOrderList = {{ processing_order_list | safe}}
+    var processingOrderList = "{{ processing_order_list|safe}}"
     var orderList;
     var toSendIds=[]
     var body=document.getElementsByTagName("body")[0]
@@ -124,17 +124,18 @@
 
 
     function displayOrders(){
-            var ordersToDisplay="";
-            for(var i=0;i<processingOrderList.length;i++){
-                console.log(processingOrderList[i])
-                ordersToDisplay+="<hr>"+"<p>Order Details</p><br> "+
-                                "<p> Order Id: "+processingOrderList[i].pk+"</p>"+
-                                "<p>Total Weight:"+ processingOrderList[i].fields.total_weight +"</p>"+
-                                "<p>Priority:"+processingOrderList[i].fields.priority+"</p>"+
-                                "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic.name+"</p>"+
-                                "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
-            }
-            processingOrderDetail.innerHTML=ordersToDisplay;
+            // var ordersToDisplay="";
+            // console.log(processingOrderList);
+            // for(var i=0;i<processingOrderList.length;i++){
+            //     console.log(processingOrderList[i])
+            //     ordersToDisplay+="<hr>"+"<p>Order Details</p><br> "+
+            //                     "<p> Order Id: "+processingOrderList[i].pk+"</p>"+
+            //                     "<p>Total Weight:"+ processingOrderList[i].fields.total_weight +"</p>"+
+            //                     "<p>Priority:"+processingOrderList[i].fields.priority+"</p>"+
+            //                     "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic.name+"</p>"+
+            //                     "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
+            // }
+            processingOrderDetail.innerHTML=processingOrderList;
     }
 
 

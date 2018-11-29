@@ -39,7 +39,7 @@ class TokenSendView(View):
 
         # print(signing.loads(token[2:]))
 
-        return HttpResponse('<h1>Ha!</h1>')
+        return HttpResponse('<h1>Token sent!</h1>')
 
 class LoginView(View):
     def get(self, request):
@@ -113,7 +113,6 @@ class ItemsAllView(View):
             order = Order()
             if totalWeight:
                 order.total_weight = totalWeight
-                print("Haha")
                 print(self.request.user)
                 order.ordering_clinic = ClinicManager.objects.get(user=self.request.user).clinic
                 order.priority = priority
@@ -243,12 +242,20 @@ class WarehouseProcessingView(View):
         orders_to_process.sort(key=lambda x: x.priority, reverse=True)
         processing_list.sort(key=lambda x: x.priority, reverse=True)
         # print (orders_to_process[0].ordering_clinic)
+        toSend=' '
+        for order in processing_list:
+            toSend+="<hr>"
+            toSend+="<p> Order Id: "+str(order.pk)+"</p>"
+            toSend+="<p>Ordering Clinic:"+ str(order.ordering_clinic) +"</p>"
+            toSend+= "<td> <button id='"+str(order.pk)+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
+            toSend+="<hr>"
 
 
 
+        print (toSend)
         context = {
 			'warehouse_order_list': serializers.serialize('json', orders_to_process),
-			'processing_order_list': serializers.serialize('json', processing_list),
+			'processing_order_list': toSend,
 		}
 
         if requests.user.is_authenticated:
