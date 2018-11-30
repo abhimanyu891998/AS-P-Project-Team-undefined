@@ -78,14 +78,17 @@ class MyOrdersView(View):
         return render(request, 'project/unauthenticated.html', {})
 
     def post(self, request):
-
-        print ("IDDDDDD: ")
         jData = json.loads(request.body)
-        id = jData["id"]
-
-        print(id)
-        Order.objects.all().filter(pk=id).update(status="DELIVERED")
-        Order.objects.all().filter(pk=id).update(dateDelivered=datetime.now().strftime('%Y-%m-%d %X'))
+        action = jData["action"]
+        if(action.type == 'CANCEL'):
+            print "Cancel this order!"  
+            print action.id
+        elif (action.type == 'UPDATE'):
+            id = action.id
+            Order.objects.all().filter(pk=id).update(status="DELIVERED")
+            Order.objects.all().filter(pk=id).update(dateDelivered=datetime.now().strftime('%Y-%m-%d %X'))
+            
+        
         return HttpResponse(request)
 
 class ItemsAllView(View):
