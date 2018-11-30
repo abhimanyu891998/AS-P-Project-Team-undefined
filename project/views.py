@@ -24,6 +24,8 @@ from .forms import LoginForm, TokenForm
 from django.http import HttpResponseRedirect
 import hashlib
 
+
+
 # Create your views here.
 idsForCSV = []
 
@@ -79,16 +81,13 @@ class MyOrdersView(View):
 
     def post(self, request):
         jData = json.loads(request.body)
-        action = jData["action"]
-        if(action.type == 'CANCEL'):
-            print "Cancel this order!"  
-            print action.id
-        elif (action.type == 'UPDATE'):
-            id = action.id
+        actionType = jData["actionType"]
+        id = jData["id"]
+        if(actionType == 'CANCEL'):
+            Order.objects.filter(pk=id).delete()
+        elif (actionType == 'UPDATE'):
             Order.objects.all().filter(pk=id).update(status="DELIVERED")
             Order.objects.all().filter(pk=id).update(dateDelivered=datetime.now().strftime('%Y-%m-%d %X'))
-            
-        
         return HttpResponse(request)
 
 class ItemsAllView(View):

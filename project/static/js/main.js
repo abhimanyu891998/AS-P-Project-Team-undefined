@@ -111,21 +111,46 @@ $(function(){
     }
 
 
+    $(".cancelOrder").on("click", function(){
+        var id = $(this).data("id")
+        var actionType = $(this).data("type")
+        var action = {id: id, type: actionType}
+        if(confirm("Are you sure you want to cancel this order?")){
+            $.ajax({
+                type: "POST",
+                url: "/orders/myorders",
+                contentType: 'application/json',
+                data: JSON.stringify({actionType:actionType, id:id}),
+                success: function(data){
+                    location.reload();
+                    window.alert("Successfully deleted!");
+                },
+                error: function(e){
+                  console.log(e)
+                  window.alert("Something went wrong!")
+    
+                }
+    
+            })
+        }
+        
+  });
 
     $(".notifyDelivery").on("click", function(){
         var id = $(this).data("id")
-        console.log(id)
-
+        var actionType = $(this).data("type")
+        var action = {id: id, type: actionType}
         $.ajax({
             type: "POST",
             url: "/orders/myorders",
             contentType: 'application/json',
-            data: JSON.stringify({id:id}),
+            data: JSON.stringify({actionType:actionType, id:id}),
             success: function(data){
                 $(".notifyDelivery-"+id).text("Delivered!")
                 $(".notifyDelivery-"+id).addClass("notified")
                 $(".notifyDelivery-"+id).attr("disabled", "disabled");
                 window.alert("Success!")
+                location.reload();
             },
             error: function(e){
               console.log(e)

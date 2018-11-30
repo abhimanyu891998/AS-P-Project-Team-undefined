@@ -5,7 +5,7 @@
 
 <ul>
     {% for order in myorders %}
-        <li style="margin: 20px;display: flex; justify-content: space-between;width: 30%">
+        <li style="margin: 20px;display: flex; justify-content: space-between;width: 50%">
             <p>Order_id: {{order.id}}</p>
             <p>Weight: {{order.total_weight}}</p>
 
@@ -14,6 +14,10 @@
                 {% else  %} Notify Delivery!
                 {% endif %}
             </button>
+            {% if order.status == 'QUEUED_FOR_PROCESSING' %}
+            <button class="cancelOrder" data-id="{{order.id}}" data-type="CANCEL">Cancel</button> 
+            {% endif %}
+            
         </li>
     {% endfor %}
 </ul>
