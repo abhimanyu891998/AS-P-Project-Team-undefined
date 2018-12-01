@@ -12,7 +12,7 @@
     </div>
 
     <div class="buttons">
-        <button id="popqueue" data-js-vars=”{{ warehouse_order_list }}”>Pack Top Order</button>
+        <button id="popqueue" data-js-vars=”{{ warehouse_order_list }}”>Pick Top Order</button>
     </div>
 
     <div id="orderDetails">
@@ -109,35 +109,24 @@
     }
 
     function displayOrders(){
-            var ordersToDisplay="";
-            for(var i=0;i<processingOrderList.length;i++){
-                ordersToDisplay+="<hr>"+"<p>Order Details</p><br> "+
-                                "<p> Order Id: "+processingOrderList[i].pk+"</p>"+
-                                "<p>Items:"+ processingOrderList[i].fields.total_weight +"</p>"+
-                                "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic+"</p>"+
-                                "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
-            }
-            processingOrderDetail.innerHTML=ordersToDisplay;
-    }
-
-
-
-
-    function displayOrders(){
-            // var ordersToDisplay="";
-            // console.log(processingOrderList);
-            // for(var i=0;i<processingOrderList.length;i++){
-            //     console.log(processingOrderList[i])
-            //     ordersToDisplay+="<hr>"+"<p>Order Details</p><br> "+
-            //                     "<p> Order Id: "+processingOrderList[i].pk+"</p>"+
-            //                     "<p>Total Weight:"+ processingOrderList[i].fields.total_weight +"</p>"+
-            //                     "<p>Priority:"+processingOrderList[i].fields.priority+"</p>"+
-            //                     "<p>Ordering Clinic: "+processingOrderList[i].fields.ordering_clinic.name+"</p>"+
-            //                     "<td> <button id='"+processingOrderList[i].pk+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
-            // }
             processingOrderDetail.innerHTML=processingOrderList;
     }
 
+    function sendPackingConfirmation(elem){
+        var id=elem.id;
+        $.ajax({
+            type: "POST",
+            url: "/orders/warehouse/packingConfirmation",
+            contentType: 'application/json',
+            data: JSON.stringify({id:id}),
+            success: function(data){
+                document.location.reload()
+            },
+            error: function(e){
+              console.log(e)
+            }
+        });
+    }
 
 
 

@@ -285,10 +285,16 @@ class WarehouseProcessingView(View):
         # print (orders_to_process[0].ordering_clinic)
         toSend=' '
         for order in processing_list:
+            orderId=order.pk
+            orderItemList = OrderedItem.objects.all().filter(order=orderId)
             toSend+="<hr>"
             toSend+="<p> Order Id: "+str(order.pk)+"</p>"
             toSend+="<p>Ordering Clinic:"+ str(order.ordering_clinic) +"</p>"
-            toSend+= "<td> <button id='"+str(order.pk)+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"+"<hr><br><br>";
+            toSend+="<p> Items in Order:  </p>"
+            for orderedItem in orderItemList:
+                toSend+="<p> <span>"+str(orderedItem.item.name) +" </span> <span> Quantity: "+str(orderedItem.quantity) +"</p>"
+            toSend+= "<td> <button id='"+str(order.pk)+"' onclick='generatePdf(this)'> Generate PDF</button> </td>"
+            toSend+= "<td> <button id='"+str(order.pk)+"' onclick='sendPackingConfirmation(this)'> Pack Order</button> </td>"
             toSend+="<hr>"
 
 
@@ -312,6 +318,14 @@ class WarehouseProcessingView(View):
             return HttpResponse()
 
 
+class WarehousePackConfirmation(View):
+    def post(self,request):
+        if request.is_ajax():
+            jData = json.loads(request.body)
+            id = jData["id"]
+            Order.objects.filter(pk=id).update(status="QUEUED_FOR_DISPATCH")
+            return HttpResponse()
+
 
 class WarehousePDFView(View):
     def post(self, request):
@@ -322,7 +336,7 @@ class WarehousePDFView(View):
 
         response = HttpResponse(content_type='text/pdf')
         response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
-
+        
         # Create the PDF object, using the buffer as its "file."
         p = canvas.Canvas(response)
 
@@ -344,7 +358,7 @@ class WarehousePDFView(View):
         p.showPage()
         p.save()
         ctr=700
-        Order.objects.filter(pk=shippingOrderId).update(status="QUEUED_FOR_DISPATCH")
+        # Order.objects.filter(pk=shippingOrderId).update(status="QUEUED_FOR_DISPATCH")
         Order.objects.filter(pk=shippingOrderId).update(dateProcessed=datetime.now().strftime('%Y-%m-%d %X'))
 
         # FileResponse sets the Content-Disposition header so that browsers

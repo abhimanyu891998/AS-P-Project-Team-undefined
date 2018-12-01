@@ -6,16 +6,15 @@
 <ul>
     {% for order in myorders %}
         <li style="margin: 20px;display: flex; justify-content: space-between;width: 50%">
-            <p>Order_id: {{order.id}}</p>
-            <p>Weight: {{order.total_weight}}</p>
-
-            <button class="notifyDelivery notifyDelivery-{{order.id}} {% if order.status == 'DELIVERED' %} notified {% endif %}" data-id="{{order.id}}" data-type="UPDATE">
-                {% if order.status == 'DELIVERED' %} Delivered!
-                {% else  %} Notify Delivery!
-                {% endif %}
-            </button>
+            {% if order.status != 'DELIVERED' %} 
+                <p>Order_id: {{order.id}}</p>
+                <p>Order Status: {{order.status}}</p>
+                <button class="notifyDelivery notifyDelivery-{{order.id}}"  data-id="{{order.id}}" data-type="UPDATE">
+                    Notify Delivery
+                </button>
+            {% endif %}
             {% if order.status == 'QUEUED_FOR_PROCESSING' %}
-            <button class="cancelOrder" data-id="{{order.id}}" data-type="CANCEL">Cancel</button> 
+                <button class="cancelOrder" data-id="{{order.id}}" data-type="CANCEL">Cancel</button> 
             {% endif %}
             
         </li>

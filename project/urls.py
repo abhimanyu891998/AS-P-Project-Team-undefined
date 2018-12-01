@@ -25,10 +25,10 @@ urlpatterns = [
     path('orders/dispatch/gencsv', views.GenerateCSVAllView.as_view(), name='generatecsv'),
     path('orders/warehouse', views.WarehouseProcessingView.as_view(), name='warehouseprocessing'),
     path('orders/warehouse/genpdf', views.WarehousePDFView.as_view(), name='warehousepdf'),
+    path('orders/warehouse/packingConfirmation', views.WarehousePackConfirmation.as_view(), name='packConfirmation'),
     path('orders/myorders', views.MyOrdersView.as_view(), name='myorders'),
     path('register/', views.RegistrationView.as_view(), name='register'),
     path('forgot-password', views.ForgotPassword.as_view(), name='forgotPassword'),
-    
     path('clinicLocation_list/', views.ChooseClinicLocationView.as_view(), name='chooseClinicLocation'),
 
 ]
