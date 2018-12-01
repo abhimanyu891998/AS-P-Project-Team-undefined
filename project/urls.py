@@ -31,5 +31,6 @@ urlpatterns = [
     path('send-link', views.SendLink.as_view(), name='sendLink'),
     path('adminView', views.AdminView.as_view(), name='admin'),
     path('update-user/', views.UpdateUser.as_view(), name='updateUser'),
+    path('change-password/', views.PasswordChangeView.as_view(), name='changePassword'),
     path('clinicLocation_list/', views.ChooseClinicLocationView.as_view(), name='chooseClinicLocation'),
 ]

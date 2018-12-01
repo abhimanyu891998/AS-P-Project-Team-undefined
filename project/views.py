@@ -4,10 +4,11 @@ import json
 import csv
 import io
 import decimal
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.mail import send_mail
 from io import BytesIO
 from project.forms import RegistrationForm
@@ -26,6 +27,7 @@ from django.http import HttpResponseRedirect
 from django.core.mail import EmailMessage
 import hashlib
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import update_session_auth_hash
 
 
 
@@ -69,6 +71,26 @@ class ForgotPassword(View):
         temp.save()
         return HttpResponse('<h1>Password change request sent!</h1>')
 
+class PasswordChangeView(View):
+    def get(self, request):
+        context = {
+            'form' : PasswordChangeForm(request.user)
+            }
+        return render(request, 'project/password_change.html', context)
+    def post(self, request):
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            return HttpResponse('<h1>Password changed!</h1>')
+
+            # messages.success(request, 'Your password was successfully updated!')
+            # return redirect('change_password')
+        else:
+            return HttpResponse('<h1>Password change issue!</h1>')
+        
+        
+        
 
 class SendLink(View):
     def post(self, request):
@@ -108,7 +130,8 @@ class HomeView(View):
                 return HttpResponseRedirect('/orders/dispatch')
             elif request.user.role== 4:
                 return HttpResponseRedirect('/adminView')
-        return render(request, 'project/login.html', {})
+        return HttpResponseRedirect('/login')
+
 
 class UpdateUser(View):
    def get(self, request):

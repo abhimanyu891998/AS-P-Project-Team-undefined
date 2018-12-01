@@ -5,7 +5,7 @@
 
 <ul>
     {% for order in myorders %}
-        <li style="margin: 20px;display: flex; justify-content: space-between;width: 50%">
+        <li style="margin: 20px;display: flex; justify-content: space-between;width: 70%">
             {% if order.status != 'DELIVERED' %} 
                 <p>Order_id: {{order.id}}</p>
                 <p>Order Status: {{order.status}}</p>
