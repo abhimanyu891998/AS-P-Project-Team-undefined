@@ -447,3 +447,16 @@ img{
     color: white;
     cursor: not-allowed;
 }
+
+.changePasswordPage ul{
+    font-size: 12px;
+    position: absolute;
+    bottom: 50px;
+}
+
+.goodButton{
+    padding: 10px 20px;
+    background: white;
+    border-radius: 4px;
+    margin: 10px 10px 10px 0;
+}

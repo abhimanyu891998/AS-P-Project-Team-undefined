@@ -19,7 +19,6 @@ from django.urls import include, path
 from project import views
 
 urlpatterns = [
-
     path('orders/supplies', views.ItemsAllView.as_view(), name='items'),
     path('orders/dispatch', views.DispatchAllView.as_view(), name = 'dispatchqueue'),
     path('orders/dispatch/gencsv', views.GenerateCSVAllView.as_view(), name='generatecsv'),
@@ -29,6 +28,8 @@ urlpatterns = [
     path('orders/myorders', views.MyOrdersView.as_view(), name='myorders'),
     path('register/', views.RegistrationView.as_view(), name='register'),
     path('forgot-password', views.ForgotPassword.as_view(), name='forgotPassword'),
+    path('send-link', views.SendLink.as_view(), name='sendLink'),
+    path('adminView', views.AdminView.as_view(), name='admin'),
+    path('update-user/', views.UpdateUser.as_view(), name='updateUser'),
     path('clinicLocation_list/', views.ChooseClinicLocationView.as_view(), name='chooseClinicLocation'),
-
 ]

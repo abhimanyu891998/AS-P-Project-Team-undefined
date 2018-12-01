@@ -1,0 +1,14 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+    <h1>Update User Information</h1>
+
+    <form id="updateUserDetailsForm" action="" method="POST">
+        {% csrf_token %}
+        <label for="">Email</label>: <input type="email" name="email" value="{{user.email}}"><br>
+        <label for="">Name</label>: <input type="text" name="name" value="{{user.name}}"><br>
+        <label for="">Last Name</label>: <input type="text" name="last_name" value="{{user.last_name}}"><br>
+        <button class="updateUserDetails goodButton">Submit</button>
+    </form>
+
+{% endblock %}

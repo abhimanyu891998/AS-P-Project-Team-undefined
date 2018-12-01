@@ -7,7 +7,7 @@ import decimal
 from django.shortcuts import render
 from django.views import View
 from django.core import serializers
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.core.mail import send_mail
 from io import BytesIO
 from project.forms import RegistrationForm
@@ -25,12 +25,12 @@ from .forms import LoginForm, TokenForm
 from django.http import HttpResponseRedirect
 from django.core.mail import EmailMessage
 import hashlib
+from django.contrib.auth.forms import PasswordResetForm
 
 
 
 # Create your views here.
 idsForCSV = []
-
 class TokenSendView(View):
     def get(self, request):
         form = TokenForm
@@ -45,17 +45,88 @@ class TokenSendView(View):
 
         return HttpResponse('<h1>Token sent!</h1>')
 
+class AdminView(View):
+    def get(self, request):
+        context = {
+            'users': User.objects.all().filter(changePassword=True),
+        }
+
+        if request.user.is_authenticated:
+            if(self.request.user.role == 4 or self.request.user.role == 5):
+                return render(request, 'project/admin_list.html', context)
+        return render(request, 'project/unauthenticated.html', {})
+
+
 
 class ForgotPassword(View):
     def post(self, request):
         jData = json.loads(request.body)
         usernameAccount = jData["username"]
-        print("this is it:")
+        print("this is it: on forgot password view")
         print(usernameAccount)
         temp = User.objects.get(username=usernameAccount)
         temp.changePassword = True
+        temp.save()
         return HttpResponse('<h1>Password change request sent!</h1>')
 
+
+class SendLink(View):
+    def post(self, request):
+        jData = json.loads(request.body)
+        usernameAccount = jData["username"]
+        user = User.objects.get(username=usernameAccount)
+        user.changePassword = False
+        user.save()
+        form = PasswordResetForm({'email': user.email})
+
+        print("this is it:on send link view")
+        print(usernameAccount)
+        if form.is_valid():
+            request = HttpRequest()
+            request.META['SERVER_NAME'] = 'localhost'
+            request.META['SERVER_PORT'] = '80'
+            form.save(
+                request= request,
+                # end_mail("SE", "Delivery dispatched", 'teamundefined18@gmail.com', ['manvibansal75@gmail.com'],
+                # use_https=True,
+                from_email="teamundefined18@gmail.com", 
+                email_template_name='registration/password_reset_email.html')
+        
+        
+        
+        return HttpResponse('<h1>Password change request sent!</h1>')
+
+
+class HomeView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            if request.user.role == 1 or request.user.role == 5:
+                return HttpResponseRedirect('/orders/supplies')
+            elif request.user.role== 2:
+                return HttpResponseRedirect('/orders/warehouse')
+            elif request.user.role== 3:
+                return HttpResponseRedirect('/orders/dispatch')
+            elif request.user.role== 4:
+                return HttpResponseRedirect('/adminView')
+        return render(request, 'project/login.html', {})
+
+class UpdateUser(View):
+   def get(self, request):
+       user = self.request.user
+       context = {
+           'user': user
+       }
+       return render(request, 'project/update_user.html', context)
+
+   def post(self, request):
+       user = self.request.user
+
+       user.email = request.POST.get("email")
+       user.name = request.POST.get("name")
+       print(request.POST.get("name"))
+       user.last_name = request.POST.get("last_name")
+       user.save()
+       return HttpResponseRedirect('/orders/supplies')
 
 class LoginView(View):
     def get(self, request):
@@ -68,12 +139,14 @@ class LoginView(View):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if user.role == 1:
+            if user.role == 1 or user.role == 5:
                 return HttpResponseRedirect('/orders/supplies')
             elif user.role== 2:
                 return HttpResponseRedirect('/orders/warehouse')
             elif user.role== 3:
                 return HttpResponseRedirect('/orders/dispatch')
+            elif user.role== 4:
+                return HttpResponseRedirect('/adminView')
         return render(request, 'project/login.html', {'form':LoginForm, 'error':'Invalid username or password!'})
 
 
