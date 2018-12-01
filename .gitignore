@@ -5,3 +5,4 @@
 project/__pycache__/
 venv/
 project/migrations/
+.DS_Store
