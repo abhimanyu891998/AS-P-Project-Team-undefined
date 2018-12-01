@@ -9,7 +9,7 @@ from django.views import View
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
-
+from io import BytesIO
 from project.forms import RegistrationForm
 from project.models import *
 from django.conf import settings
@@ -23,6 +23,7 @@ from datetime import datetime
 from django.core import signing
 from .forms import LoginForm, TokenForm
 from django.http import HttpResponseRedirect
+from django.core.mail import EmailMessage
 import hashlib
 
 
@@ -173,7 +174,6 @@ class DispatchAllView(View):
         for order in temp_list:
             if totalWeight+ (decimal.Decimal(order.total_weight) + decimal.Decimal(1.20)) <=25.00:
                 dispatch_order_list.append(order)
-                print("HELLO" + order.status)
                 totalWeight = totalWeight + order.total_weight
 
         list_to_send=serializers.serialize('json', dispatch_order_list)
@@ -193,11 +193,37 @@ class DispatchAllView(View):
             ids = jData["ids"]
             global idsForCSV
             idsForCSV = ids
-
+            #ids here are order ids
             for id in ids :
-                   # implement email here
-                # send_mail("SE", "Delivery dispatched", 'teamundefined18@gmail.com', ['manvibansal75@gmail.com'],
-                # fail_silently=False)
+                order=Order.objects.get(pk=id)
+                orderingClinic=order.ordering_clinic
+                for clinicManager in ClinicManager.objects.all():
+                    if(str(clinicManager.clinic.name) == str(orderingClinic)):
+                        email=clinicManager.user.email
+                        filename="details.pdf"
+                        buffer = BytesIO()
+                        p = canvas.Canvas("details.pdf")
+                        orderItemList = OrderedItem.objects.all().filter(order=id)
+                        pdfContent = 'Order ID:' + ' ' +  str(id) + ' '
+                        pdfContent += 'Items: '
+                        p.drawString(100,100,pdfContent)
+                        ctr = 700
+                        for orderedItem in orderItemList:
+                            ctr = ctr - 100
+                            p.drawString(100,ctr,orderedItem.item.name)
+                        p.showPage()
+                        p.save()
+
+                        # Get the value of the BytesIO buffer and write it to the response.
+                        pdf = buffer.getvalue()
+                        buffer.close()
+                        msg = EmailMessage('Order Dispatch Confirmation for Order Id'+str(id), 'Dear user,\n Your order has been dispatched.\n Please find the attached shipping label.', 'teamundefined18@gmail.com', [str(email)])
+                        
+                        msg.content_subtype = "html"  
+                        msg.attach_file('details.pdf')
+                        msg.send()
+
+
                 Order.objects.filter(pk=id).update(status="DISPATCHED")
                 Order.objects.filter(pk=id).update(dateDispatched=datetime.now().strftime('%Y-%m-%d %X'))
 
@@ -288,9 +314,6 @@ class WarehouseProcessingView(View):
 
 
 class WarehousePDFView(View):
-
-
-
     def post(self, request):
         if request.is_ajax():
             jData = json.loads(request.body)
