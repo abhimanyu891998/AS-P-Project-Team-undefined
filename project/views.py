@@ -217,7 +217,7 @@ class DispatchAllView(View):
                         # Get the value of the BytesIO buffer and write it to the response.
                         pdf = buffer.getvalue()
                         buffer.close()
-                        msg = EmailMessage('Order Dispatch Confirmation for Order Id'+str(id), 'Dear user,\n Your order has been dispatched.\n Please find the attached shipping label.', 'teamundefined18@gmail.com', [str(email)])
+                        msg = EmailMessage('Order Dispatch Confirmation for Order Id '+str(id), 'Dear user,\n Your order has been dispatched.\n Please find the attached shipping label.', 'teamundefined18@gmail.com', [str(email)])
                         
                         msg.content_subtype = "html"  
                         msg.attach_file('details.pdf')
