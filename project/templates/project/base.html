@@ -17,6 +17,10 @@
             <button class="dropbtn navbar"></button>
             <div id="myDropdown" class="navbarDropdown dropdown dropdown-content">
                 <a href="{% url 'logout' %}" class="option">Logout</a>
+                <a href="/update-user" class="option">Update Details</a>
+                {% if user.role == 1 or user.role == 5 %}
+                    <a href="/orders/myorders" class="option">My Orders</a>
+                {% endif %}    
             </div>
         </div>
         {% endif %}

@@ -104,7 +104,25 @@ $(function(){
             contentType: 'application/json',
             data: JSON.stringify({username:username}),
             success: function(data){
+                window.alert("Request sent!")
+            },
+            error: function(e){
+              console.log(e)
+              window.alert("Something went wrong!")
+            }
 
+        })
+    })
+
+    $(".sendPasswordResetLink").on("click", function(){
+        var username = $(this).data("username")
+        $.ajax({
+            type: "POST",
+            url: "/send-link",
+            contentType: 'application/json',
+            data: JSON.stringify({username:username}),
+            success: function(data){
+                window.alert("Link sent!")
             },
             error: function(e){
               console.log(e)
@@ -179,5 +197,9 @@ $(function(){
 
     })
   });
-
+  $(".updateUserDetails").on("click", function(e){
+    e.preventDefault();
+    window.alert("Success!")
+    $("#updateUserDetailsForm").submit();
+  })
 });

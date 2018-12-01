@@ -1,0 +1,20 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="">
+
+<ul>
+    {% for user in users %}
+        <li style="margin: 20px;display: flex; justify-content: space-between;width: 50%">
+            {{user.username}}
+            <button class="sendPasswordResetLink goodButton" data-username={{user.username}}>Send Link</button>
+
+        </li>
+    {% empty %}
+        <div>No password reset requests.</div>
+    {% endfor %}
+</ul>
+</div>
+
+
+{% endblock %}
