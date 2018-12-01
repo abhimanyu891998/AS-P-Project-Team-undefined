@@ -44,6 +44,18 @@ class TokenSendView(View):
 
         return HttpResponse('<h1>Token sent!</h1>')
 
+
+class ForgotPassword(View):
+    def post(self, request):
+        jData = json.loads(request.body)
+        usernameAccount = jData["username"]
+        print("this is it:")
+        print(usernameAccount)
+        temp = User.objects.get(username=usernameAccount)
+        temp.changePassword = True
+        return HttpResponse('<h1>Password change request sent!</h1>')
+
+
 class LoginView(View):
     def get(self, request):
         form = LoginForm

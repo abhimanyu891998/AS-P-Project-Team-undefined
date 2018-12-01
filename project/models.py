@@ -31,6 +31,7 @@ class User(AbstractUser):
     username = models.CharField(unique=True, max_length=200)
     email = models.EmailField(max_length=254, unique=True, null=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True)
+    changePassword = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

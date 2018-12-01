@@ -95,6 +95,25 @@ $(function(){
         $(".navbarDropdown").toggleClass("show");
     });
 
+    $(".forgotPassword").on("click", function(){
+        console.log("Clicked button :)");
+        var username = prompt("Please enter your username:");
+        $.ajax({
+            type: "POST",
+            url: "/forgot-password",
+            contentType: 'application/json',
+            data: JSON.stringify({username:username}),
+            success: function(data){
+
+            },
+            error: function(e){
+              console.log(e)
+              window.alert("Something went wrong!")
+            }
+
+        })
+    })
+
     // Close the dropdown menu if the user clicks outside of it
     window.onclick = function(event) {
       if (!event.target.matches('.dropbtn')) {
