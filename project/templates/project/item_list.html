@@ -7,9 +7,9 @@
     <p>Category:</p>
     <div class="categories">
     <div class="dropdown">
-        <button class="dropbtn categories" style="background-image: url({% static 'img/arrow.svg' %})">Dropdown</button>
+        <button class="dropbtn categories" style="background-image: url({% static 'img/arrow.svg' %})">All</button>
         <div id="dropdownCategories" class="dropdown-content">
-            <a data-category="all" class="option">All</a>
+            <a data-category="all" class="option categoryOption">All</a>
             {% for category in categories %}
             <a data-category="{{category|slugify}}" class="option">{{category}}</a>
             {% endfor %}

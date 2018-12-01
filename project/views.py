@@ -475,7 +475,7 @@ class RegistrationView(View):
                 elif token.startswith('ad'):
                     user.role = 4
                     user.save()
-                    return HttpResponseRedirect('/admin')
+                    return HttpResponseRedirect('/adminView')
                 else:
                     return HttpResponseRedirect('/register')
 

@@ -46,7 +46,7 @@ $(function(){
         let category = $(this).data("category")
         $(".item").hide();
         $(".item."+category).show();
-        $(".dropbtn")[0].innerHTML=category;
+        $(".dropbtn.categories")[0].innerHTML=category;
     })
 
     $(".addToCart").on("click", function(){
