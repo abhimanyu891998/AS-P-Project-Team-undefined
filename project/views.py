@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import json
 import csv
 import io
+import decimal
 from django.shortcuts import render
 from django.views import View
 from django.core import serializers
@@ -145,7 +146,7 @@ class ItemsAllView(View):
 class DispatchAllView(View):
     def get(self,request, *args, **kwargs):
         orders = Order.objects.all()
-        totalWeight=0
+        totalWeight=decimal.Decimal(0.00)
         temp_list = []
         for order in orders:
             if order.status=='QUEUED_FOR_DISPATCH':
@@ -158,7 +159,7 @@ class DispatchAllView(View):
         temp_list.sort(key=lambda x: x.priority, reverse=True)
         dispatch_order_list=[]
         for order in temp_list:
-            if totalWeight+order.total_weight<=23.80:
+            if totalWeight+ (decimal.Decimal(order.total_weight) + decimal.Decimal(1.20)) <=25.00:
                 dispatch_order_list.append(order)
                 print("HELLO" + order.status)
                 totalWeight = totalWeight + order.total_weight
