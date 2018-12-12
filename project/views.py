@@ -270,7 +270,7 @@ class DispatchAllView(View):
         for order in temp_list:
             if totalWeight+ (decimal.Decimal(order.total_weight) + decimal.Decimal(1.20)) <=25.00:
                 dispatch_order_list.append(order)
-                totalWeight = totalWeight + order.total_weight
+                totalWeight = totalWeight + decimal.Decimal(order.total_weight) + decimal.Decimal(1.20)
 
         list_to_send=serializers.serialize('json', dispatch_order_list)
         context = {
